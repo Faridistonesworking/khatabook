@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faridi Stones | Daily Khata, Wasooli & Digital Ledger Suite</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            royal: {
+              800: '#1e293b',
+              900: '#0f172a',
+              950: '#020617'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Cinzel"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Touch Friendly Enhancements */
+    button, a, input, select {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .touch-press:active {
+      transform: scale(0.97);
+      transition: transform 0.08s ease;
+    }
+
+    /* Mobile Sheet Slide-Up */
+    @media (max-width: 640px) {
+      .mobile-sheet {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        max-height: 92vh !important;
+      }
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printableSlipArea, #printableSlipArea * { visibility: visible; }
+      #printableSlipArea {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+        background: white !important;
+        color: black !important;
+      }
+      .no-print { display: none !important; }
+    }
+
+    .thermal-receipt {
+      font-family: 'JetBrains Mono', monospace;
+      max-width: 320px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 16px 14px;
+      border: 1px dashed #94a3b8;
+      font-size: 11px;
+      line-height: 1.45;
+      color: #0f172a;
+    }
+    .dashed-divider { border-top: 1px dashed #64748b; margin: 8px 0; }
+    .double-divider { border-top: 2px dashed #0f172a; margin: 8px 0; }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col md:flex-row pb-20 md:pb-0">
+
+  <!-- Desktop Sidebar Navigation (Hidden on Mobile) -->
+  <aside class="hidden md:flex md:w-64 bg-royal-950 text-white flex-col flex-shrink-0 md:sticky md:top-0 md:h-screen border-r border-white/10 z-40">
+    <div class="p-5 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-emerald-900/50">
+          <i class="fa-solid fa-gem text-lg"></i>
+        </div>
+        <div>
+          <h1 id="sidebarBizName" class="font-serif font-bold text-base tracking-wide text-white leading-tight">FARIDI STONES</h1>
+          <p id="sidebarBizTag" class="text-[10px] text-emerald-400 font-semibold tracking-wider uppercase">Digital Khata & Wasooli</p>
+        </div>
+      </div>
+
+      <div class="mt-4 bg-white/5 rounded-lg p-2.5 border border-white/10">
+        <div class="flex items-center justify-between mb-1.5">
+          <label class="text-[9px] uppercase font-bold tracking-wider text-slate-400">
+            <i class="fa-solid fa-briefcase text-emerald-400 mr-1"></i> Active Business
+          </label>
+          <button onclick="openModal('modalEditBiz')" class="text-[10px] text-emerald-400 hover:text-emerald-300 transition" title="Business Naam Badalna / Naya Business">
+            <i class="fa-solid fa-pen-to-square"></i> Badalna
+          </button>
+        </div>
+        <select id="activeBizSelect" onchange="switchActiveBusiness(this.value)" class="w-full bg-royal-900 text-white text-xs font-semibold rounded p-1.5 border border-white/20 focus:outline-none focus:border-emerald-500">
+          <!-- Populated dynamically via JS -->
+        </select>
+      </div>
+    </div>
+
+    <nav class="p-3 flex-1 flex flex-col gap-1.5 overflow-y-auto">
+      <button onclick="navigateTab('dashboard')" id="nav_dashboard" class="nav-tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-white bg-emerald-700/20 text-emerald-300 border-l-4 border-emerald-500 transition-all text-left">
+        <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+        <span>Dashboard & Overview</span>
+      </button>
+
+      <button onclick="navigateTab('customers')" id="nav_customers" class="nav-tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-all text-left">
+        <i class="fa-solid fa-users w-4 text-center"></i>
+        <span>Grahak (Total / Wasool / Baaki)</span>
+      </button>
+
+      <button onclick="navigateTab('collections')" id="nav_collections" class="nav-tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-all text-left">
+        <i class="fa-solid fa-hand-holding-dollar w-4 text-center"></i>
+        <span>Daily Wasooli Register</span>
+      </button>
+
+      <button onclick="navigateTab('transactions')" id="nav_transactions" class="nav-tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-all text-left">
+        <i class="fa-solid fa-receipt w-4 text-center"></i>
+        <span>All Entries & Slip Archive</span>
+      </button>
+
+      <button onclick="navigateTab('expenses')" id="nav_expenses" class="nav-tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-all text-left">
+        <i class="fa-solid fa-wallet w-4 text-center"></i>
+        <span>Kharche (Expenses)</span>
+      </button>
+    </nav>
+
+    <div class="p-3 border-t border-white/10 bg-royal-950 text-xs">
+      <div class="flex items-center justify-between text-slate-400 mb-2">
+        <span class="flex items-center gap-1.5 text-[11px]">
+          <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="syncLabel">Offline Safe Mode</span>
+        </span>
+        <button onclick="openModal('modalSettings')" class="text-slate-400 hover:text-emerald-400 transition" title="Google Sheet Sync Settings">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
+      <button onclick="exportFullJSONBackup()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-[11px] font-semibold border border-white/10 transition">
+        <i class="fa-solid fa-download text-emerald-400"></i> Backup JSON Data
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile Bottom Navigation Dock (Khatabook Style) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-royal-950/95 backdrop-blur-md border-t border-white/10 z-40 px-2 py-1.5 flex items-center justify-around shadow-2xl">
+    <button onclick="navigateTab('dashboard')" id="mob_nav_dashboard" class="mob-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-emerald-400 transition-all">
+      <i class="fa-solid fa-chart-pie text-base mb-0.5"></i>
+      <span class="text-[10px] font-bold">Khata</span>
+    </button>
+
+    <button onclick="navigateTab('customers')" id="mob_nav_customers" class="mob-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-slate-400 transition-all">
+      <i class="fa-solid fa-users text-base mb-0.5"></i>
+      <span class="text-[10px] font-semibold">Grahak</span>
+    </button>
+
+    <!-- Center Floating Action Button for Quick Wasooli -->
+    <button onclick="openWasooliModal()" class="flex flex-col items-center justify-center -mt-5 bg-gradient-to-tr from-blue-700 to-blue-500 text-white w-12 h-12 rounded-full shadow-lg shadow-blue-600/40 border-2 border-royal-950 touch-press">
+      <i class="fa-solid fa-hand-holding-dollar text-lg"></i>
+    </button>
+
+    <button onclick="navigateTab('collections')" id="mob_nav_collections" class="mob-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-slate-400 transition-all">
+      <i class="fa-solid fa-receipt text-base mb-0.5"></i>
+      <span class="text-[10px] font-semibold">Wasooli</span>
+    </button>
+
+    <button onclick="navigateTab('expenses')" id="mob_nav_expenses" class="mob-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-slate-400 transition-all">
+      <i class="fa-solid fa-wallet text-base mb-0.5"></i>
+      <span class="text-[10px] font-semibold">Kharche</span>
+    </button>
+  </nav>
+
+  <main class="flex-1 flex flex-col min-w-0 bg-slate-50">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-3 md:px-8 py-2.5 md:py-3 flex items-center justify-between shadow-sm">
+      <div class="flex items-center gap-2 md:gap-3">
+        <!-- Mobile Logo Icon -->
+        <div class="md:hidden w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center shadow-sm">
+          <i class="fa-solid fa-gem text-xs"></i>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <h2 id="topBarBizName" class="text-sm md:text-base font-extrabold text-royal-950 leading-tight">
+              Faridi Stones
+            </h2>
+            <span id="topBarBizCity" class="text-[9px] md:text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Ajmer</span>
+          </div>
+          <span class="text-[9px] md:text-[10px] text-slate-500 font-medium">Digital Khata & Daily Wasooli</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons (Optimized for Mobile & Desktop) -->
+      <div class="flex items-center gap-1.5 md:gap-2">
+        <button onclick="openWasooliModal()" class="touch-press px-2.5 md:px-3.5 py-1.5 md:py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition">
+          <i class="fa-solid fa-hand-holding-dollar text-xs"></i>
+          <span class="hidden sm:inline">+ Roz Ki</span> Wasooli
+        </button>
+
+        <button onclick="openUdhaarModal()" class="touch-press px-2.5 md:px-3.5 py-1.5 md:py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition">
+          <i class="fa-solid fa-minus text-xs"></i>
+          <span class="hidden sm:inline">Maine</span> Diya
+        </button>
+
+        <button onclick="openModal('modalNewCust')" class="touch-press px-2 md:px-3 py-1.5 md:py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition" title="Naya Grahak">
+          <i class="fa-solid fa-user-plus text-xs"></i>
+          <span class="hidden md:inline">Grahak</span>
+        </button>
+
+        <!-- Mobile Settings Icon -->
+        <button onclick="openModal('modalSettings')" class="md:hidden w-8 h-8 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="p-3 md:p-8 flex-1 overflow-y-auto">
+
+      <section id="view_dashboard" class="page-view block space-y-4 md:space-y-6">
+        
+        <!-- Live Financial Metric Cards: 2x2 on Mobile, 4-Col on Desktop -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
+          <!-- Total Market Maang / Total Given -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-amber-500"></div>
+            <div class="flex items-center justify-between text-slate-500 mb-1">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider">Kul Maang</span>
+              <span class="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs md:text-sm"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+            </div>
+            <div class="text-lg md:text-2xl font-extrabold text-amber-700" id="dashValTotalMaang">₹0</div>
+            <p class="text-[10px] text-slate-500 mt-0.5 truncate hidden sm:block">Kul hisaab credit</p>
+          </div>
+
+          <!-- Total Lifetime Wasool (Collected) -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-blue-600"></div>
+            <div class="flex items-center justify-between text-slate-500 mb-1">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider">Kul Wasool</span>
+              <span class="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs md:text-sm"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+            </div>
+            <div class="text-lg md:text-2xl font-extrabold text-blue-600" id="dashValTotalWasool">₹0</div>
+            <p class="text-[10px] text-slate-500 mt-0.5 truncate">Aaj: <span id="dashTodayColPart" class="font-bold text-blue-700">₹0</span></p>
+          </div>
+
+          <!-- Total Bacha Hua Baaki (Pending / Lena Hai) -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-rose-600"></div>
+            <div class="flex items-center justify-between text-slate-500 mb-1">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider">Net Baaki</span>
+              <span class="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xs md:text-sm"><i class="fa-solid fa-scale-balanced"></i></span>
+            </div>
+            <div class="text-lg md:text-2xl font-extrabold text-rose-600" id="dashValTotalBaaki">₹0</div>
+            <p class="text-[10px] text-slate-500 mt-0.5 truncate"><span id="dashPendingCustCount">0</span> grahak pending</p>
+          </div>
+
+          <!-- Aaj Ke Kharche -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-slate-700"></div>
+            <div class="flex items-center justify-between text-slate-500 mb-1">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider">Aaj Kharche</span>
+              <span class="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center text-xs md:text-sm"><i class="fa-solid fa-wallet"></i></span>
+            </div>
+            <div class="text-lg md:text-2xl font-extrabold text-slate-800" id="dashValTodayExp">₹0</div>
+            <p class="text-[10px] text-slate-500 mt-0.5 truncate hidden sm:block">Shop petty cash</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-receipt text-blue-600"></i>
+                <h3 class="font-bold text-xs md:text-sm text-slate-800">Haal Hi Ki Entries (Recent Slips)</h3>
+              </div>
+              <button onclick="navigateTab('transactions')" class="text-xs font-semibold text-emerald-700 hover:underline">Sabhi Dekhein</button>
+            </div>
+
+            <!-- Mobile Recent List (Card Styled) -->
+            <div id="dashRecentMobileList" class="md:hidden divide-y divide-slate-100 p-2">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Desktop Table -->
+            <div class="hidden md:block overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] tracking-wider">
+                    <th class="py-3 px-4">Slip / Date</th>
+                    <th class="py-3 px-4">Grahak / Dukan</th>
+                    <th class="py-3 px-4">Particulars</th>
+                    <th class="py-3 px-4 text-right">Rakam</th>
+                    <th class="py-3 px-4 text-right">Bacha Hua Baaki</th>
+                    <th class="py-3 px-4 text-center">Slip Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dashRecentTbody" class="divide-y divide-slate-100">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Watchlist Column -->
+          <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+            <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-hourglass-half text-rose-500"></i>
+                <h3 class="font-bold text-xs md:text-sm text-slate-800">Top Baaki Watchlist</h3>
+              </div>
+              <button onclick="navigateTab('customers')" class="text-xs font-semibold text-emerald-700 hover:underline">Sabhi</button>
+            </div>
+
+            <div class="p-3 divide-y divide-slate-100 overflow-y-auto max-h-[360px]" id="dashWatchlistContainer">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view_customers" class="page-view hidden space-y-3 md:space-y-4">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="relative flex-1">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="custSearchInput" oninput="renderCustomersTable()" placeholder="Grahak, dukan, ya phone khojein..." class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-emerald-600 bg-slate-50">
+          </div>
+          <button onclick="openModal('modalNewCust')" class="touch-press px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-sm">
+            <i class="fa-solid fa-user-plus"></i> + Naya Grahak Entry
+          </button>
+        </div>
+
+        <!-- Filter Chips for Easy Mobile Tapping -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+          <button onclick="setCustFilter('ALL')" id="filterChip_ALL" class="cust-filter-chip px-3 py-1 rounded-full font-bold bg-slate-900 text-white shadow-sm whitespace-nowrap">
+            Sabhi Grahak
+          </button>
+          <button onclick="setCustFilter('PENDING')" id="filterChip_PENDING" class="cust-filter-chip px-3 py-1 rounded-full font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 whitespace-nowrap">
+            <i class="fa-solid fa-circle-exclamation text-rose-500 mr-1 text-[10px]"></i> Lena Baaki
+          </button>
+          <button onclick="setCustFilter('SETTLED')" id="filterChip_SETTLED" class="cust-filter-chip px-3 py-1 rounded-full font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 whitespace-nowrap">
+            <i class="fa-solid fa-circle-check text-emerald-500 mr-1 text-[10px]"></i> Hisaab Chukt
+          </button>
+          <button onclick="setCustFilter('ADVANCE')" id="filterChip_ADVANCE" class="cust-filter-chip px-3 py-1 rounded-full font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 whitespace-nowrap">
+            <i class="fa-solid fa-arrow-up text-blue-500 mr-1 text-[10px]"></i> Advance
+          </button>
+        </div>
+
+        <!-- Mobile Customer Cards Container -->
+        <div id="customersCardList" class="md:hidden space-y-2.5">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Desktop Customer Table Container -->
+        <div class="hidden md:block bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] tracking-wider">
+                  <th class="py-3 px-4">Grahak Details</th>
+                  <th class="py-3 px-4">Dukan / Firm & Shehar</th>
+                  <th class="py-3 px-4 text-right">Kul Maang (Total)</th>
+                  <th class="py-3 px-4 text-right">Kul Wasool (Jama)</th>
+                  <th class="py-3 px-4 text-right">Bacha Hua Baaki</th>
+                  <th class="py-3 px-4 text-center">Fast Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customersTableBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="view_collections" class="page-view hidden space-y-3 md:space-y-4">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div>
+            <h3 class="font-extrabold text-sm md:text-base text-slate-900">Roozana Wasooli Register</h3>
+            <p class="text-[11px] text-slate-500">Record payments received, auto-update balances, send digital slips</p>
+          </div>
+          <button onclick="openWasooliModal()" class="touch-press px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-sm">
+            <i class="fa-solid fa-hand-holding-dollar"></i> + Nayi Wasooli Jama
+          </button>
+        </div>
+
+        <!-- Mobile Collections List -->
+        <div id="collectionsMobileList" class="md:hidden space-y-2.5">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Desktop Table -->
+        <div class="hidden md:block bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] tracking-wider">
+                  <th class="py-3 px-4">Slip No.</th>
+                  <th class="py-3 px-4">Date & Time</th>
+                  <th class="py-3 px-4">Grahak / Dukan</th>
+                  <th class="py-3 px-4">Mode</th>
+                  <th class="py-3 px-4">Particulars</th>
+                  <th class="py-3 px-4 text-right">Wasool Rakam</th>
+                  <th class="py-3 px-4 text-right">Bacha Hua Baaki</th>
+                  <th class="py-3 px-4 text-center">Digital Slip</th>
+                </tr>
+              </thead>
+              <tbody id="collectionTableBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="view_transactions" class="page-view hidden space-y-3 md:space-y-4">
+        <div class="flex items-center justify-between bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div>
+            <h3 class="font-extrabold text-sm md:text-base text-slate-900">Master Transactions Archive</h3>
+            <p class="text-[11px] text-slate-500">Complete Udhaar and Wasooli ledger</p>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="openUdhaarModal()" class="touch-press px-2.5 py-1.5 bg-rose-600 text-white rounded-lg font-bold text-xs">
+              <i class="fa-solid fa-minus"></i> Udhaar
+            </button>
+            <button onclick="openWasooliModal()" class="touch-press px-2.5 py-1.5 bg-blue-600 text-white rounded-lg font-bold text-xs">
+              <i class="fa-solid fa-plus"></i> Wasooli
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] tracking-wider">
+                  <th class="py-3 px-4">Slip / Date</th>
+                  <th class="py-3 px-4">Grahak & Dukan</th>
+                  <th class="py-3 px-4">Type</th>
+                  <th class="py-3 px-4">Particulars / Details</th>
+                  <th class="py-3 px-4">Mode</th>
+                  <th class="py-3 px-4 text-right">Amount (₹)</th>
+                  <th class="py-3 px-4 text-right">New Baaki</th>
+                  <th class="py-3 px-4 text-center">Slip</th>
+                </tr>
+              </thead>
+              <tbody id="allTxTableBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="view_expenses" class="page-view hidden space-y-3 md:space-y-4">
+        <div class="flex items-center justify-between bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div>
+            <h3 class="font-extrabold text-sm md:text-base text-slate-900">Kharche (Shop Expenses)</h3>
+            <p class="text-[11px] text-slate-500">Record petty cash and shop expenditures</p>
+          </div>
+          <button onclick="openModal('modalNewExpense')" class="touch-press px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-plus"></i> + Naya Kharcha
+          </button>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] tracking-wider">
+                  <th class="py-3 px-4">Date</th>
+                  <th class="py-3 px-4">Category (Manual)</th>
+                  <th class="py-3 px-4">Description</th>
+                  <th class="py-3 px-4">Payment Mode</th>
+                  <th class="py-3 px-4 text-right">Amount (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="expensesTableBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="modalNewCust" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet animate-slide-up">
+      <!-- Mobile Pull Bar Indicator -->
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
+        <div class="flex items-center gap-2 text-emerald-800">
+          <i class="fa-solid fa-user-plus"></i>
+          <h3 class="font-extrabold text-sm">Naya Grahak Entry (Manual Details)</h3>
+        </div>
+        <button onclick="closeModal('modalNewCust')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+      </div>
+
+      <form onsubmit="handleCustomerSubmit(event)" class="p-5 space-y-3.5 max-h-[80vh] overflow-y-auto">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Grahak Ka Naam (Customer Name) *</label>
+          <input type="text" id="custNameInput" required placeholder="Jaise: Haji Sahab, Mohammad Zubair" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Dukan / Firm Ka Naam (Shop / Business Name)</label>
+          <input type="text" id="custShopInput" placeholder="Jaise: Al-Madina Jewellers, Shop No. 14" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp Mobile *</label>
+            <input type="tel" id="custPhoneInput" inputmode="tel" required placeholder="10 Digit Number" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">City / Location</label>
+            <input type="text" id="custCityInput" placeholder="Jaise: Ajmer, Jaipur" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- 3-Tier Interactive Initial Dues & Collection Box -->
+        <div class="bg-gradient-to-br from-amber-50/80 via-slate-50 to-blue-50/60 p-3.5 rounded-xl border border-amber-200/80 space-y-3 shadow-inner">
+          <div class="flex items-center justify-between pb-1 border-b border-slate-200/80">
+            <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-calculator text-amber-600"></i> Shuruati Hisaab Setup
+            </span>
+            <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Live Calculator</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-bold text-amber-900 mb-1">
+                1. Kul Maang (Total Amount ₹) *
+              </label>
+              <input type="number" id="custTotalMaangInput" inputmode="numeric" oninput="calcCustModalBaaki()" value="0" min="0" placeholder="Jaise: 10000" class="w-full px-3 py-2 border border-amber-300 rounded-lg text-sm font-extrabold text-amber-950 focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white shadow-sm">
+              <p class="text-[9.5px] text-amber-700 mt-0.5 leading-tight">Kul kitna hisaab banta hai</p>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-blue-900 mb-1">
+                2. Jama / Collect Hua (₹)
+              </label>
+              <input type="number" id="custTotalWasoolInput" inputmode="numeric" oninput="calcCustModalBaaki()" value="0" min="0" placeholder="Jaise: 2000" class="w-full px-3 py-2 border border-blue-300 rounded-lg text-sm font-extrabold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white shadow-sm">
+              <p class="text-[9.5px] text-blue-700 mt-0.5 leading-tight">Pehle se kitna collect hua</p>
+            </div>
+          </div>
+
+          <!-- Dynamic Auto-Calculated Remaining Due Card -->
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200/90 flex items-center justify-between shadow-sm">
+            <div>
+              <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">3. Bacha Hua Baaki (Lena Hai)</div>
+              <div id="custModalBaakiLabel" class="text-base font-extrabold text-rose-600 leading-tight mt-0.5">₹0</div>
+            </div>
+            <div id="custModalBaakiBadge" class="text-[10px] font-bold px-2 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+              Hisaab Chukt (₹0)
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="touch-press w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-extrabold text-xs shadow-md shadow-emerald-900/20 transition">
+            Save Grahak Record
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modalWasooli" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-blue-50/70">
+        <div class="flex items-center gap-2 text-blue-700">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+          <h3 class="font-extrabold text-sm">Daily Wasooli / Jama Entry</h3>
+        </div>
+        <button onclick="closeModal('modalWasooli')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+      </div>
+
+      <form onsubmit="handleWasooliSubmit(event)" class="p-5 space-y-3.5 max-h-[80vh] overflow-y-auto">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Grahak Chunein (Kisse wasooli mili?) *</label>
+          <select id="wasooliCustSelect" onchange="updateWasooliLivePreview()" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+
+        <!-- Live Hisaab Breakdown Box -->
+        <div id="wasooliLiveBox" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-1">
+          <div class="flex justify-between text-slate-600">
+            <span>Kul Maang (Total Udhaar):</span>
+            <span id="wasooliPreviewTotal" class="font-bold text-slate-800">₹0</span>
+          </div>
+          <div class="flex justify-between text-slate-600">
+            <span>Abhi Tak Jama (Total Wasool):</span>
+            <span id="wasooliPreviewPaid" class="font-bold text-emerald-600">₹0</span>
+          </div>
+          <div class="flex justify-between font-bold border-t border-slate-200 pt-1 text-rose-600">
+            <span>Abhi Bacha Hua Baaki:</span>
+            <span id="wasooliPreviewRemaining">₹0</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Wasool Hui Rakam (Jama Amount ₹) *</label>
+          <input type="number" id="wasooliAmountInput" inputmode="numeric" oninput="updateWasooliLivePreview()" required placeholder="Jaise: 2000" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base font-bold text-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <div id="wasooliLiveNewBaaki" class="text-[11px] font-semibold text-emerald-700 mt-1"></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Payment Mode</label>
+            <select id="wasooliModeSelect" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <option value="Cash">Cash (Rokad)</option>
+              <option value="UPI">UPI (GPay/PhonePe)</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Cheque">Cheque</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Reference / UTR</label>
+            <input type="text" id="wasooliRefInput" placeholder="Optional" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Receipt Note / Particulars</label>
+          <input type="text" id="wasooliNotesInput" placeholder="Jaise: Daily kist jama" class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <div class="pt-1">
+          <button type="submit" class="touch-press w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-extrabold text-xs shadow-md shadow-blue-900/20 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-receipt"></i> Save Wasooli & Open Digital Slip
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modalUdhaar" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-rose-50/70">
+        <div class="flex items-center gap-2 text-rose-700">
+          <i class="fa-solid fa-minus"></i>
+          <h3 class="font-extrabold text-sm">Maine Diya (Naya Udhaar / Maal Entry)</h3>
+        </div>
+        <button onclick="closeModal('modalUdhaar')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+      </div>
+
+      <form onsubmit="handleUdhaarSubmit(event)" class="p-5 space-y-3.5 max-h-[80vh] overflow-y-auto">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Grahak Chunein (Kisko maal diya?) *</label>
+          <select id="udhaarCustSelect" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Naye Maal / Udhaar Ki Rakam (₹) *</label>
+          <input type="number" id="udhaarAmountInput" inputmode="numeric" required placeholder="Jaise: 5000" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base font-bold text-rose-700 focus:ring-2 focus:ring-rose-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Maal / Item Particulars (Manual Detail) *</label>
+          <textarea id="udhaarNotesInput" rows="2" required placeholder="Jaise: 6.25 Ratti Zambian Panna, ring polishing, etc." class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="pt-1">
+          <button type="submit" class="touch-press w-full py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-extrabold text-xs shadow-md shadow-rose-900/20 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-receipt"></i> Save Udhaar & Open Digital Memo
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modalNewExpense" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-amber-50/70">
+        <div class="flex items-center gap-2 text-amber-800">
+          <i class="fa-solid fa-wallet"></i>
+          <h3 class="font-extrabold text-sm">Dukan Ka Kharcha (Record Expense)</h3>
+        </div>
+        <button onclick="closeModal('modalNewExpense')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+      </div>
+
+      <form onsubmit="handleExpenseSubmit(event)" class="p-5 space-y-3.5 max-h-[80vh] overflow-y-auto">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Kharcha Category (Apne hisaab se likhein) *</label>
+          <input type="text" id="expCategoryInput" required placeholder="Jaise: Rent, Chai, Karigar Mazdoori, Courier" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Amount (₹) *</label>
+          <input type="number" id="expAmountInput" inputmode="numeric" required placeholder="0" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-amber-700 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Description / Tafseel</label>
+          <input type="text" id="expDescInput" placeholder="Details of payment" class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Payment Mode</label>
+          <select id="expModeSelect" class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <option value="Cash">Cash (Rokad)</option>
+            <option value="UPI">UPI</option>
+            <option value="Bank">Bank Account</option>
+          </select>
+        </div>
+
+        <div class="pt-1">
+          <button type="submit" class="touch-press w-full py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-extrabold text-xs shadow-md transition">
+            Save Expense Entry
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modalEditBiz" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2 text-slate-800">
+          <i class="fa-solid fa-store text-emerald-600"></i>
+          <h3 class="font-extrabold text-sm">Business Settings & Name</h3>
+        </div>
+        <button onclick="closeModal('modalEditBiz')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+      </div>
+
+      <form onsubmit="handleEditBizSubmit(event)" class="p-5 space-y-3.5 max-h-[80vh] overflow-y-auto">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Business / Firm Ka Naam *</label>
+          <input type="text" id="editBizNameInput" required placeholder="Faridi Stones" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Business Tagline / Subtitle</label>
+          <input type="text" id="editBizSubInput" placeholder="Certified Natural Gemstones" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">City / Location</label>
+          <input type="text" id="editBizCityInput" placeholder="Ajmer Sharif (Rajasthan)" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div class="pt-2 flex gap-2">
+          <button type="submit" class="touch-press flex-1 py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold text-xs shadow-sm transition">
+            Save Business
+          </button>
+          <button type="button" onclick="addNewBusinessPrompt()" class="touch-press px-3 py-3 border border-slate-200 rounded-xl text-xs font-semibold hover:bg-slate-50 text-slate-700">
+            + Naya Business
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modalSlip" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet my-auto">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2 text-slate-800">
+          <i class="fa-solid fa-receipt text-emerald-600"></i>
+          <h3 class="font-extrabold text-xs uppercase tracking-wider">Faridi Stones Digital Receipt Slip</h3>
+        </div>
+        <button onclick="closeModal('modalSlip')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+      </div>
+
+      <div class="p-3 md:p-4 bg-slate-100 flex justify-center max-h-[55vh] overflow-y-auto">
+        <div id="printableSlipArea" class="thermal-receipt shadow-md rounded-lg">
+          <!-- Populated via renderSlipHTML() -->
+        </div>
+      </div>
+
+      <!-- Action Buttons for WhatsApp, Native Share & Print -->
+      <div class="p-3.5 bg-white border-t border-slate-100 space-y-2">
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btnSendWhatsAppSlip" class="touch-press w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp Slip
+          </button>
+          <button onclick="shareSlipNative()" class="touch-press w-full py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+            <i class="fa-solid fa-share-nodes text-xs"></i> Native Share
+          </button>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="window.print()" class="touch-press w-full py-2 px-3 rounded-lg border border-slate-300 hover:bg-slate-50 font-bold text-xs text-slate-700 flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-print text-xs"></i> Print Thermal
+          </button>
+          <button onclick="copySlipToClipboard()" class="touch-press w-full py-2 px-3 rounded-lg border border-slate-300 hover:bg-slate-50 font-semibold text-xs text-slate-700 flex items-center justify-center gap-1.5 transition">
+            <i class="fa-regular fa-copy text-xs"></i> Copy SMS Text
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalLedger" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden mobile-sheet my-auto max-h-[92vh] flex flex-col">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div>
+          <h3 id="ledgerModalTitle" class="font-extrabold text-sm text-slate-800">Grahak Statement Passbook</h3>
+          <p id="ledgerModalSubtitle" class="text-[11px] text-slate-500">Statement history & running balance</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="hidden sm:flex px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-100 items-center gap-1">
+            <i class="fa-solid fa-print"></i> Print
+          </button>
+          <button onclick="closeModal('modalLedger')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+        </div>
+      </div>
+
+      <div class="p-3.5 md:p-4 overflow-y-auto flex-1 space-y-3.5">
+        <!-- 3-Tier Summary Card in Passbook -->
+        <div class="grid grid-cols-3 gap-2">
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-center">
+            <div class="text-[9px] uppercase font-bold text-amber-800">Kul Maang</div>
+            <div id="ledgerCardTotalMaang" class="text-sm md:text-base font-extrabold text-amber-900 mt-0.5">₹0</div>
+          </div>
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-2.5 text-center">
+            <div class="text-[9px] uppercase font-bold text-blue-800">Kul Wasool</div>
+            <div id="ledgerCardTotalWasool" class="text-sm md:text-base font-extrabold text-blue-900 mt-0.5">₹0</div>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 rounded-xl p-2.5 text-center">
+            <div class="text-[9px] uppercase font-bold text-rose-800">Bacha Baaki</div>
+            <div id="ledgerCardTotalBaaki" class="text-sm md:text-base font-extrabold text-rose-900 mt-0.5">₹0</div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-700">Detailed Passbook Entries</span>
+          <button id="btnLedgerWhatsAppReminder" class="touch-press px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-sm">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Send Reminder
+          </button>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[9px] md:text-[10px] tracking-wider">
+                <th class="py-2.5 px-3">Date</th>
+                <th class="py-2.5 px-2">Slip</th>
+                <th class="py-2.5 px-3">Particulars</th>
+                <th class="py-2.5 px-2 text-right">Diya</th>
+                <th class="py-2.5 px-2 text-right">Wasool</th>
+                <th class="py-2.5 px-3 text-right">Baaki</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerPassbookTbody" class="divide-y divide-slate-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalSettings" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
+
+      <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2 text-slate-800">
+          <i class="fa-solid fa-cloud-arrow-up text-emerald-600"></i>
+          <h3 class="font-extrabold text-sm">Google Sheet Cloud Sync</h3>
+        </div>
+        <button onclick="closeModal('modalSettings')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Google Apps Script Web App URL</label>
+          <input type="url" id="sheetApiUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <p class="text-[10px] text-slate-500 mt-1">Deploy Apps Script in your Google Sheet and paste URL here to auto-stream every entry.</p>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button onclick="saveSheetSettings()" class="touch-press flex-1 py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold shadow-sm transition">
+            Save & Connect
+          </button>
+          <button onclick="triggerRestoreJSON()" class="touch-press py-3 px-3 border border-slate-300 rounded-xl font-semibold hover:bg-slate-50">
+            Restore Backup
+          </button>
+          <input type="file" id="restoreFileInput" class="hidden" accept=".json" onchange="handleRestoreFile(event)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-16 md:bottom-5 right-4 left-4 md:left-auto md:right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    // Business Registry with manual customization
+    let businesses = JSON.parse(localStorage.getItem('fs_businesses_v6')) || {
+      'b_main': {
+        name: 'Faridi Stones',
+        sub: 'Certified Natural Gemstones & Jewellery',
+        city: 'Ajmer Sharif (Rajasthan)',
+        phone: '98290XXXXX',
+        prefix: 'FS'
+      }
+    };
+
+    let activeBusinessId = localStorage.getItem('fs_active_biz_v6') || 'b_main';
+    let currentViewingSlip = null;
+    let activeCustomerFilter = 'ALL';
+
+    function getStore() {
+      const storageKey = `fs_store_${activeBusinessId}_v6`;
+      return JSON.parse(localStorage.getItem(storageKey)) || {
+        customers: [],
+        transactions: [],
+        expenses: []
+      };
+    }
+
+    function saveStore(data) {
+      const storageKey = `fs_store_${activeBusinessId}_v6`;
+      localStorage.setItem(storageKey, JSON.stringify(data));
+      renderApp();
+    }
+
+    function getTodayString() { return new Date().toLocaleDateString('en-GB'); }
+    function getTodayTimeString() { return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); }
+
+    function renderBusinessOptions() {
+      const select = document.getElementById('activeBizSelect');
+      select.innerHTML = Object.keys(businesses).map(id => `
+        <option value="${id}" ${id === activeBusinessId ? 'selected' : ''}>${businesses[id].name}</option>
+      `).join('');
+
+      const biz = businesses[activeBusinessId] || Object.values(businesses)[0];
+      document.getElementById('sidebarBizName').innerText = biz.name.toUpperCase();
+      document.getElementById('sidebarBizTag').innerText = biz.sub || 'Digital Khata & Wasooli';
+      document.getElementById('topBarBizName').innerText = biz.name;
+      document.getElementById('topBarBizCity').innerText = biz.city ? biz.city.split(' ')[0] : 'Ajmer';
+
+      document.getElementById('editBizNameInput').value = biz.name;
+      document.getElementById('editBizSubInput').value = biz.sub || '';
+      document.getElementById('editBizCityInput').value = biz.city || '';
+    }
+
+    function switchActiveBusiness(bizId) {
+      activeBusinessId = bizId;
+      localStorage.setItem('fs_active_biz_v6', bizId);
+      renderBusinessOptions();
+      renderApp();
+      showToast(`Switched to ${businesses[bizId].name}`, 'info');
+    }
+
+    function handleEditBizSubmit(e) {
+      e.preventDefault();
+      const current = businesses[activeBusinessId];
+      current.name = document.getElementById('editBizNameInput').value.trim();
+      current.sub = document.getElementById('editBizSubInput').value.trim();
+      current.city = document.getElementById('editBizCityInput').value.trim();
+
+      localStorage.setItem('fs_businesses_v6', JSON.stringify(businesses));
+      closeModal('modalEditBiz');
+      renderBusinessOptions();
+      showToast('Business details updated!', 'success');
+    }
+
+    function addNewBusinessPrompt() {
+      const newName = prompt('Naye Business Ka Naam Likhein:');
+      if (!newName || !newName.trim()) return;
+
+      const newId = 'b_' + Date.now();
+      businesses[newId] = {
+        name: newName.trim(),
+        sub: 'General Trading & Khata',
+        city: 'Ajmer Sharif',
+        phone: '',
+        prefix: newName.trim().slice(0, 2).toUpperCase()
+      };
+
+      localStorage.setItem('fs_businesses_v6', JSON.stringify(businesses));
+      closeModal('modalEditBiz');
+      switchActiveBusiness(newId);
+    }
+
+    function navigateTab(tabId) {
+      // Desktop Nav update
+      document.querySelectorAll('.nav-tab-btn').forEach(b => {
+        b.classList.remove('bg-emerald-700/20', 'text-emerald-300', 'border-l-4', 'border-emerald-500');
+        b.classList.add('text-slate-400');
+      });
+      const activeBtn = document.getElementById(`nav_${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-emerald-700/20', 'text-emerald-300', 'border-l-4', 'border-emerald-500');
+        activeBtn.classList.remove('text-slate-400');
+      }
+
+      // Mobile Bottom Nav update
+      document.querySelectorAll('.mob-nav-btn').forEach(b => {
+        b.classList.remove('text-emerald-400', 'font-bold');
+        b.classList.add('text-slate-400');
+      });
+      const activeMobBtn = document.getElementById(`mob_nav_${tabId}`);
+      if (activeMobBtn) {
+        activeMobBtn.classList.add('text-emerald-400', 'font-bold');
+        activeMobBtn.classList.remove('text-slate-400');
+      }
+
+      document.querySelectorAll('.page-view').forEach(v => v.classList.add('hidden'));
+      const activeView = document.getElementById(`view_${tabId}`);
+      if (activeView) activeView.classList.remove('hidden');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setCustFilter(filter) {
+      activeCustomerFilter = filter;
+      document.querySelectorAll('.cust-filter-chip').forEach(c => {
+        c.className = 'cust-filter-chip px-3 py-1 rounded-full font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 whitespace-nowrap';
+      });
+      const activeChip = document.getElementById(`filterChip_${filter}`);
+      if (activeChip) {
+        activeChip.className = 'cust-filter-chip px-3 py-1 rounded-full font-bold bg-slate-900 text-white shadow-sm whitespace-nowrap';
+      }
+      renderCustomersTable();
+    }
+
+    function calculateCustomerStats(customer, transactions) {
+      const custTx = transactions.filter(t => t.customerId === customer.id);
+      
+      const udhaarTxAmount = custTx
+        .filter(t => t.type === 'GAVE')
+        .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+
+      const wasoolTxAmount = custTx
+        .filter(t => t.type === 'GOT')
+        .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+
+      const openingMaang = Number(customer.openingTotalMaang !== undefined ? customer.openingTotalMaang : (customer.openingBalance || 0));
+      const openingWasool = Number(customer.openingTotalWasool || 0);
+
+      const totalMaang = openingMaang + udhaarTxAmount;
+      const totalWasool = openingWasool + wasoolTxAmount;
+      const remainingBalance = totalMaang - totalWasool;
+
+      return { totalMaang, totalWasool, remainingBalance, openingMaang, openingWasool };
+    }
+
+    function calcCustModalBaaki() {
+      const maang = Number(document.getElementById('custTotalMaangInput')?.value || 0);
+      const wasool = Number(document.getElementById('custTotalWasoolInput')?.value || 0);
+      const baaki = maang - wasool;
+
+      const labelEl = document.getElementById('custModalBaakiLabel');
+      const badgeEl = document.getElementById('custModalBaakiBadge');
+      if (!labelEl || !badgeEl) return;
+
+      labelEl.innerText = `₹${Math.abs(baaki).toLocaleString('en-IN')}`;
+
+      if (baaki > 0) {
+        labelEl.className = 'text-base font-extrabold text-rose-600 leading-tight mt-0.5';
+        badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded-md bg-rose-50 text-rose-700 border border-rose-200';
+        badgeEl.innerHTML = `<i class="fa-solid fa-arrow-down-left mr-1"></i> Lena Baaki: ₹${baaki.toLocaleString('en-IN')}`;
+      } else if (baaki < 0) {
+        labelEl.className = 'text-base font-extrabold text-emerald-600 leading-tight mt-0.5';
+        badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200';
+        badgeEl.innerHTML = `<i class="fa-solid fa-arrow-up-right mr-1"></i> Advance: ₹${Math.abs(baaki).toLocaleString('en-IN')}`;
+      } else {
+        labelEl.className = 'text-base font-extrabold text-slate-800 leading-tight mt-0.5';
+        badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200';
+        badgeEl.innerText = 'Hisaab Chukt (₹0)';
+      }
+    }
+
+    function renderApp() {
+      renderBusinessOptions();
+      const store = getStore();
+      const today = getTodayString();
+
+      let aggregateMaang = 0;
+      let aggregateWasool = 0;
+      let aggregateBaaki = 0;
+      let pendingCount = 0;
+
+      store.customers.forEach(c => {
+        const stats = calculateCustomerStats(c, store.transactions);
+        aggregateMaang += stats.totalMaang;
+        aggregateWasool += stats.totalWasool;
+        aggregateBaaki += stats.remainingBalance;
+        if (stats.remainingBalance > 0) pendingCount++;
+      });
+
+      const todayCollections = store.transactions.filter(t => t.date === today && t.type === 'GOT');
+      const todayColAmount = todayCollections.reduce((acc, t) => acc + Number(t.amount), 0);
+
+      const todayExpenses = store.expenses.filter(e => e.date === today);
+      const todayExpAmount = todayExpenses.reduce((acc, e) => acc + Number(e.amount), 0);
+
+      document.getElementById('dashValTotalMaang').innerText = `₹${aggregateMaang.toLocaleString('en-IN')}`;
+      document.getElementById('dashValTotalWasool').innerText = `₹${aggregateWasool.toLocaleString('en-IN')}`;
+      document.getElementById('dashTodayColPart').innerText = `₹${todayColAmount.toLocaleString('en-IN')}`;
+      document.getElementById('dashValTotalBaaki').innerText = `₹${aggregateBaaki.toLocaleString('en-IN')}`;
+      document.getElementById('dashPendingCustCount').innerText = pendingCount;
+      document.getElementById('dashValTodayExp').innerText = `₹${todayExpAmount.toLocaleString('en-IN')}`;
+
+      populateCustomerSelects(store.customers, store.transactions);
+      renderRecentTxTable(store.transactions);
+      renderWatchlist(store.customers, store.transactions);
+      renderCustomersTable();
+      renderCollectionRegisterTable(store.transactions);
+      renderAllTransactionsTable(store.transactions);
+      renderExpensesTable(store.expenses);
+    }
+
+    function populateCustomerSelects(customers, transactions) {
+      const wasooliSelect = document.getElementById('wasooliCustSelect');
+      const udhaarSelect = document.getElementById('udhaarCustSelect');
+
+      if (!customers || customers.length === 0) {
+        const emptyOpt = '<option value="">Pehle "+ Naya Grahak" add karein</option>';
+        wasooliSelect.innerHTML = emptyOpt;
+        udhaarSelect.innerHTML = emptyOpt;
+        return;
+      }
+
+      const opts = customers.map(c => {
+        const stats = calculateCustomerStats(c, transactions);
+        return `<option value="${c.id}">${c.name} ${c.shop ? `(${c.shop})` : ''} • Baaki: ₹${stats.remainingBalance.toLocaleString('en-IN')}</option>`;
+      }).join('');
+
+      wasooliSelect.innerHTML = opts;
+      udhaarSelect.innerHTML = opts;
+      updateWasooliLivePreview();
+    }
+
+    function updateWasooliLivePreview() {
+      const store = getStore();
+      const custId = document.getElementById('wasooliCustSelect').value;
+      const enterAmount = Number(document.getElementById('wasooliAmountInput').value || 0);
+
+      const cust = store.customers.find(c => c.id === custId);
+      if (!cust) return;
+
+      const stats = calculateCustomerStats(cust, store.transactions);
+      document.getElementById('wasooliPreviewTotal').innerText = `₹${stats.totalMaang.toLocaleString('en-IN')}`;
+      document.getElementById('wasooliPreviewPaid').innerText = `₹${stats.totalWasool.toLocaleString('en-IN')}`;
+      document.getElementById('wasooliPreviewRemaining').innerText = `₹${stats.remainingBalance.toLocaleString('en-IN')}`;
+
+      const newBaaki = stats.remainingBalance - enterAmount;
+      const previewMsg = document.getElementById('wasooliLiveNewBaaki');
+      if (enterAmount > 0) {
+        previewMsg.innerHTML = `Wasooli baad naya baaki hisaab: <strong class="${newBaaki <= 0 ? 'text-emerald-700' : 'text-rose-600'}">₹${newBaaki.toLocaleString('en-IN')}</strong>`;
+      } else {
+        previewMsg.innerHTML = '';
+      }
+    }
+
+    function renderRecentTxTable(transactions) {
+      const tbody = document.getElementById('dashRecentTbody');
+      const mobileList = document.getElementById('dashRecentMobileList');
+
+      if (!transactions || transactions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400 font-medium">Abhi koi entry nahi hui hai. Upar button se Wasooli ya Udhaar jodein.</td></tr>`;
+        mobileList.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">Koi entry maujood nahi hai.</div>`;
+        return;
+      }
+
+      const recentItems = transactions.slice(-6).reverse();
+
+      // Mobile Card Renderer
+      mobileList.innerHTML = recentItems.map(tx => {
+        const isJama = tx.type === 'GOT';
+        return `
+          <div class="py-2.5 flex items-center justify-between">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full ${isJama ? 'bg-blue-50 text-blue-600' : 'bg-rose-50 text-rose-600'} flex items-center justify-center text-xs flex-shrink-0">
+                <i class="fa-solid ${isJama ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+              </div>
+              <div class="min-w-0 truncate">
+                <div class="font-bold text-xs text-slate-800 truncate">${tx.customerName}</div>
+                <div class="text-[10px] text-slate-400 font-medium">${tx.date} • ${tx.notes || '-'}</div>
+              </div>
+            </div>
+            <div class="text-right flex items-center gap-2">
+              <div>
+                <div class="font-extrabold text-xs ${isJama ? 'text-blue-700' : 'text-rose-600'}">
+                  ${isJama ? '+' : '-'}₹${Number(tx.amount).toLocaleString('en-IN')}
+                </div>
+                <div class="text-[10px] text-slate-500">Baaki: ₹${Number(tx.newBalance || 0).toLocaleString('en-IN')}</div>
+              </div>
+              <button onclick="openSlipModal('${tx.id}')" class="touch-press px-2 py-1 rounded bg-slate-100 text-slate-700 text-[10px] font-semibold">
+                <i class="fa-solid fa-receipt text-emerald-600"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Desktop Table
+      tbody.innerHTML = recentItems.map(tx => {
+        const isJama = tx.type === 'GOT';
+        return `
+          <tr class="hover:bg-slate-50/70 transition">
+            <td class="py-2.5 px-4 font-mono font-bold text-slate-700">
+              <span class="text-slate-900">${tx.slipNo}</span><br>
+              <span class="text-[10px] text-slate-400 font-sans">${tx.date} ${tx.time || ''}</span>
+            </td>
+            <td class="py-2.5 px-4">
+              <span class="font-bold text-slate-800">${tx.customerName}</span><br>
+              <span class="text-[10px] text-slate-400">${tx.shopName || '-'}</span>
+            </td>
+            <td class="py-2.5 px-4 text-slate-600 truncate max-w-[140px]">${tx.notes || '-'}</td>
+            <td class="py-2.5 px-4 text-right font-bold text-sm ${isJama ? 'text-blue-700' : 'text-rose-600'}">
+              ${isJama ? '+' : '-'}₹${Number(tx.amount).toLocaleString('en-IN')}
+            </td>
+            <td class="py-2.5 px-4 text-right font-bold text-slate-800">
+              ₹${Number(tx.newBalance || 0).toLocaleString('en-IN')}
+            </td>
+            <td class="py-2.5 px-4 text-center">
+              <button onclick="openSlipModal('${tx.id}')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition">
+                <i class="fa-solid fa-receipt mr-1 text-emerald-600"></i> Slip
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderWatchlist(customers, transactions) {
+      const container = document.getElementById('dashWatchlistContainer');
+      const customerWithStats = (customers || []).map(c => ({
+        ...c,
+        stats: calculateCustomerStats(c, transactions)
+      })).filter(c => c.stats.remainingBalance > 0).sort((a,b) => b.stats.remainingBalance - a.stats.remainingBalance).slice(0, 5);
+
+      if (customerWithStats.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">Sabhi hisaab chukt hain. Koi pending baaki nahi hai.</div>`;
+        return;
+      }
+
+      container.innerHTML = customerWithStats.map(c => `
+        <div class="py-2 flex items-center justify-between">
+          <div class="min-w-0 pr-2">
+            <div class="font-bold text-slate-800 text-xs truncate">${c.name}</div>
+            <div class="text-[10px] text-slate-400 truncate">${c.shop ? `${c.shop} • ` : ''}${c.phone}</div>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="font-bold text-rose-600 text-xs">₹${c.stats.remainingBalance.toLocaleString('en-IN')}</div>
+            <button onclick="openWasooliModal('${c.id}')" class="text-[10px] text-blue-600 hover:underline font-semibold">+ Wasooli</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCustomersTable() {
+      const store = getStore();
+      const query = (document.getElementById('custSearchInput')?.value || '').toLowerCase().trim();
+      const tbody = document.getElementById('customersTableBody');
+      const cardList = document.getElementById('customersCardList');
+
+      let list = store.customers.map(c => ({
+        ...c,
+        stats: calculateCustomerStats(c, store.transactions)
+      }));
+
+      // Search Filter
+      if (query) {
+        list = list.filter(c => 
+          c.name.toLowerCase().includes(query) ||
+          (c.shop && c.shop.toLowerCase().includes(query)) ||
+          c.phone.includes(query) ||
+          (c.city && c.city.toLowerCase().includes(query))
+        );
+      }
+
+      // Quick Chips Filter
+      if (activeCustomerFilter === 'PENDING') {
+        list = list.filter(c => c.stats.remainingBalance > 0);
+      } else if (activeCustomerFilter === 'SETTLED') {
+        list = list.filter(c => c.stats.remainingBalance === 0);
+      } else if (activeCustomerFilter === 'ADVANCE') {
+        list = list.filter(c => c.stats.remainingBalance < 0);
+      }
+
+      if (list.length === 0) {
+        const emptyMsg = `<div class="text-center py-10 bg-white rounded-xl border border-slate-200 text-slate-400 font-medium text-xs">Koi grahak match nahi hua.</div>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 font-medium">Koi grahak nahi mila. "+ Naya Grahak" par click karein.</td></tr>`;
+        cardList.innerHTML = emptyMsg;
+        return;
+      }
+
+      // Mobile Card List (Khatabook App Style)
+      cardList.innerHTML = list.map(c => {
+        const stats = c.stats;
+        const isPending = stats.remainingBalance > 0;
+        const isAdvance = stats.remainingBalance < 0;
+
+        return `
+          <div class="bg-white rounded-xl border border-slate-200 p-3.5 shadow-sm space-y-2.5">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-emerald-700/10 text-emerald-800 font-extrabold flex items-center justify-center text-sm flex-shrink-0">
+                  ${c.name.charAt(0).toUpperCase()}
+                </div>
+                <div class="min-w-0">
+                  <h4 class="font-bold text-sm text-slate-900 leading-tight truncate">${c.name}</h4>
+                  <div class="text-[11px] text-slate-500 truncate">${c.shop ? `${c.shop} • ` : ''}${c.city || 'Ajmer'}</div>
+                </div>
+              </div>
+
+              <!-- Balance Badge -->
+              <div class="text-right flex-shrink-0">
+                <div class="font-extrabold text-sm ${isPending ? 'text-rose-600' : (isAdvance ? 'text-emerald-700' : 'text-slate-500')}">
+                  ₹${Math.abs(stats.remainingBalance).toLocaleString('en-IN')}
+                </div>
+                <span class="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${isPending ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">
+                  ${isPending ? 'Lena Baaki' : (isAdvance ? 'Advance' : 'Chukt')}
+                </span>
+              </div>
+            </div>
+
+            <!-- 3-Tier Mini Pill Breakdown -->
+            <div class="grid grid-cols-3 gap-1.5 bg-slate-50 p-2 rounded-lg text-center text-[10px]">
+              <div>
+                <span class="text-slate-500 block">Maang</span>
+                <span class="font-bold text-amber-800">₹${stats.totalMaang.toLocaleString('en-IN')}</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Wasool</span>
+                <span class="font-bold text-blue-700">₹${stats.totalWasool.toLocaleString('en-IN')}</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Net Baaki</span>
+                <span class="font-extrabold ${isPending ? 'text-rose-600' : 'text-emerald-700'}">₹${Math.abs(stats.remainingBalance).toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+
+            <!-- Fast Mobile Action Buttons -->
+            <div class="flex items-center gap-1.5 pt-0.5">
+              <button onclick="openWasooliModal('${c.id}')" class="touch-press flex-1 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm">
+                <i class="fa-solid fa-hand-holding-dollar text-xs"></i> + Wasooli
+              </button>
+              <button onclick="openCustomerLedgerModal('${c.id}')" class="touch-press px-3 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold text-xs flex items-center justify-center gap-1">
+                <i class="fa-solid fa-book-open text-xs text-emerald-700"></i> Passbook
+              </button>
+              <button onclick="sendQuickWhatsAppReminder('${c.id}')" class="touch-press w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 flex items-center justify-center text-sm flex-shrink-0" title="WhatsApp Reminder">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+              </button>
+              <a href="tel:${c.phone}" class="touch-press w-9 h-9 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center text-sm flex-shrink-0" title="Call">
+                <i class="fa-solid fa-phone text-xs"></i>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Desktop Table
+      tbody.innerHTML = list.map(c => {
+        const stats = c.stats;
+        return `
+          <tr class="hover:bg-slate-50/70 transition">
+            <td class="py-3 px-4">
+              <span class="font-bold text-slate-900 text-sm">${c.name}</span><br>
+              <span class="text-[11px] text-slate-500"><i class="fa-solid fa-phone text-[9px] text-slate-400 mr-1"></i>+91 ${c.phone}</span>
+            </td>
+            <td class="py-3 px-4">
+              <span class="font-semibold text-slate-800">${c.shop || '-'}</span><br>
+              <span class="text-[10px] text-slate-400">${c.city || 'Ajmer'}</span>
+            </td>
+            <td class="py-3 px-4 text-right font-bold text-amber-700">
+              ₹${stats.totalMaang.toLocaleString('en-IN')}
+            </td>
+            <td class="py-3 px-4 text-right font-bold text-blue-700">
+              ₹${stats.totalWasool.toLocaleString('en-IN')}
+            </td>
+            <td class="py-3 px-4 text-right">
+              <div class="font-extrabold text-sm ${stats.remainingBalance > 0 ? 'text-rose-600' : (stats.remainingBalance < 0 ? 'text-emerald-700' : 'text-slate-500')}">
+                ₹${Math.abs(stats.remainingBalance).toLocaleString('en-IN')}
+              </div>
+              <span class="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${stats.remainingBalance > 0 ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">
+                ${stats.remainingBalance > 0 ? 'Lena Baaki' : (stats.remainingBalance < 0 ? 'Advance' : 'Chukt')}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <div class="inline-flex items-center gap-1.5">
+                <button onclick="openWasooliModal('${c.id}')" class="px-2.5 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold text-xs" title="Daily Wasooli">
+                  <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Wasooli
+                </button>
+                <button onclick="openCustomerLedgerModal('${c.id}')" class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold text-xs" title="View Statement">
+                  <i class="fa-solid fa-book-open mr-1 text-emerald-700"></i> Passbook
+                </button>
+                <button onclick="sendQuickWhatsAppReminder('${c.id}')" class="px-2 py-1 rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-semibold text-xs" title="WhatsApp Reminder">
+                  <i class="fa-brands fa-whatsapp text-sm"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderCollectionRegisterTable(transactions) {
+      const tbody = document.getElementById('collectionTableBody');
+      const mobileList = document.getElementById('collectionsMobileList');
+      const collections = (transactions || []).filter(t => t.type === 'GOT');
+
+      if (collections.length === 0) {
+        const emptyMsg = `<div class="text-center py-8 bg-white rounded-xl border border-slate-200 text-slate-400 font-medium text-xs">Abhi koi collection wasooli record nahi hui hai.</div>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-10 text-slate-400 font-medium">Abhi koi collection wasooli record nahi hui hai.</td></tr>`;
+        mobileList.innerHTML = emptyMsg;
+        return;
+      }
+
+      const revCollections = collections.slice().reverse();
+
+      // Mobile Card List
+      mobileList.innerHTML = revCollections.map(c => `
+        <div class="bg-white rounded-xl border border-slate-200 p-3 shadow-sm flex items-center justify-between">
+          <div class="min-w-0 pr-2">
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-xs text-slate-900 truncate">${c.customerName}</span>
+              <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-50 text-blue-700">${c.mode}</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mt-0.5">${c.date} • ${c.slipNo}</div>
+            <div class="text-[11px] text-slate-600 truncate mt-0.5">${c.notes || '-'}</div>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="font-extrabold text-sm text-blue-700">₹${Number(c.amount).toLocaleString('en-IN')}</div>
+            <button onclick="openSlipModal('${c.id}')" class="touch-press mt-1 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">
+              <i class="fa-solid fa-receipt mr-1 text-emerald-600"></i> Slip
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      // Desktop Table
+      tbody.innerHTML = revCollections.map(c => `
+        <tr class="hover:bg-slate-50/70 transition">
+          <td class="py-3 px-4 font-mono font-bold text-slate-800">${c.slipNo}</td>
+          <td class="py-3 px-4 text-slate-600">${c.date} <span class="text-[10px] text-slate-400">${c.time || ''}</span></td>
+          <td class="py-3 px-4 font-bold text-slate-900">${c.customerName}<br><span class="text-[10px] font-normal text-slate-400">${c.shopName || ''}</span></td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700">${c.mode}</span></td>
+          <td class="py-3 px-4 text-slate-600">${c.notes || '-'}</td>
+          <td class="py-3 px-4 text-right font-extrabold text-blue-700 text-sm">₹${Number(c.amount).toLocaleString('en-IN')}</td>
+          <td class="py-3 px-4 text-right font-bold text-slate-800">₹${Number(c.newBalance || 0).toLocaleString('en-IN')}</td>
+          <td class="py-3 px-4 text-center">
+            <button onclick="openSlipModal('${c.id}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+              <i class="fa-solid fa-receipt mr-1 text-emerald-600"></i> Slip
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAllTransactionsTable(transactions) {
+      const tbody = document.getElementById('allTxTableBody');
+      if (!transactions || transactions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-10 text-slate-400 font-medium">Koi transaction entry maujood nahi hai.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = transactions.slice().reverse().map(tx => {
+        const isJama = tx.type === 'GOT';
+        return `
+          <tr class="hover:bg-slate-50/70 transition">
+            <td class="py-3 px-4 font-mono font-bold text-slate-800">${tx.slipNo}<br><span class="text-[10px] font-sans font-normal text-slate-400">${tx.date}</span></td>
+            <td class="py-3 px-4 font-bold text-slate-900">${tx.customerName}<br><span class="text-[10px] font-normal text-slate-400">${tx.shopName || ''}</span></td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${isJama ? 'bg-blue-50 text-blue-700' : 'bg-rose-50 text-rose-700'}">${isJama ? 'Wasooli' : 'Udhaar Diya'}</span></td>
+            <td class="py-3 px-4 text-slate-600">${tx.notes || '-'}</td>
+            <td class="py-3 px-4 text-slate-600">${tx.mode}</td>
+            <td class="py-3 px-4 text-right font-extrabold text-sm ${isJama ? 'text-emerald-700' : 'text-rose-600'}">
+              ${isJama ? '+' : '-'}₹${Number(tx.amount).toLocaleString('en-IN')}
+            </td>
+            <td class="py-3 px-4 text-right font-bold text-slate-800">
+              ₹${Number(tx.newBalance || 0).toLocaleString('en-IN')}
+            </td>
+            <td class="py-3 px-4 text-center">
+              <button onclick="openSlipModal('${tx.id}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+                <i class="fa-solid fa-receipt mr-1 text-emerald-600"></i> Slip
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderExpensesTable(expenses) {
+      const tbody = document.getElementById('expensesTableBody');
+      if (!expenses || expenses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-slate-400 font-medium">Abhi koi kharcha add nahi kiya gaya hai.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = expenses.slice().reverse().map(e => `
+        <tr class="hover:bg-slate-50/70 transition">
+          <td class="py-3 px-4 text-slate-600">${e.date}</td>
+          <td class="py-3 px-4 font-bold text-slate-800">${e.category}</td>
+          <td class="py-3 px-4 text-slate-600">${e.desc || '-'}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">${e.mode || 'Cash'}</span></td>
+          <td class="py-3 px-4 text-right font-bold text-amber-700">₹${Number(e.amount).toLocaleString('en-IN')}</td>
+        </tr>
+      `).join('');
+    }
+
+    function handleCustomerSubmit(e) {
+      e.preventDefault();
+      const store = getStore();
+
+      const totalMaang = Number(document.getElementById('custTotalMaangInput').value || 0);
+      const totalWasool = Number(document.getElementById('custTotalWasoolInput').value || 0);
+      const netBalance = totalMaang - totalWasool;
+
+      const newCust = {
+        id: 'CUST-' + Math.floor(1000 + Math.random() * 9000),
+        name: document.getElementById('custNameInput').value.trim(),
+        shop: document.getElementById('custShopInput').value.trim(),
+        phone: document.getElementById('custPhoneInput').value.trim(),
+        city: document.getElementById('custCityInput').value.trim(),
+        openingTotalMaang: totalMaang,
+        openingTotalWasool: totalWasool,
+        openingBalance: netBalance
+      };
+
+      store.customers.push(newCust);
+      saveStore(store);
+      closeModal('modalNewCust');
+      e.target.reset();
+      calcCustModalBaaki();
+      showToast(`Grahak '${newCust.name}' add ho gaya! (Baaki: ₹${netBalance.toLocaleString('en-IN')})`, 'success');
+      syncToGoogleSheet('ADD_CUSTOMER', newCust);
+    }
+
+    function openWasooliModal(preSelectCustId = null) {
+      const store = getStore();
+      populateCustomerSelects(store.customers, store.transactions);
+      if (preSelectCustId) {
+        document.getElementById('wasooliCustSelect').value = preSelectCustId;
+      }
+      updateWasooliLivePreview();
+      openModal('modalWasooli');
+    }
+
+    function openUdhaarModal(preSelectCustId = null) {
+      const store = getStore();
+      populateCustomerSelects(store.customers, store.transactions);
+      if (preSelectCustId) {
+        document.getElementById('udhaarCustSelect').value = preSelectCustId;
+      }
+      openModal('modalUdhaar');
+    }
+
+    function handleWasooliSubmit(e) {
+      e.preventDefault();
+      const store = getStore();
+      const biz = businesses[activeBusinessId];
+      const custId = document.getElementById('wasooliCustSelect').value;
+      const amount = Number(document.getElementById('wasooliAmountInput').value);
+      const mode = document.getElementById('wasooliModeSelect').value;
+      const ref = document.getElementById('wasooliRefInput').value.trim();
+      const notes = document.getElementById('wasooliNotesInput').value.trim();
+
+      const cust = store.customers.find(c => c.id === custId);
+      if (!cust) return showToast('Pehle grahak chunein!', 'error');
+
+      const stats = calculateCustomerStats(cust, store.transactions);
+      const prevBal = stats.remainingBalance;
+      const newBal = prevBal - amount;
+
+      const slipNo = `${biz.prefix || 'FS'}-REC-${Math.floor(10000 + Math.random() * 90000)}`;
+      const tx = {
+        id: 'tx_' + Date.now(),
+        slipNo: slipNo,
+        date: getTodayString(),
+        time: getTodayTimeString(),
+        businessId: activeBusinessId,
+        customerId: cust.id,
+        customerName: cust.name,
+        shopName: cust.shop || '',
+        customerPhone: cust.phone,
+        type: 'GOT',
+        amount: amount,
+        mode: mode,
+        ref: ref,
+        notes: notes || 'Daily Wasooli / Jama',
+        totalMaang: stats.totalMaang,
+        prevBalance: prevBal,
+        newBalance: newBal
+      };
+
+      store.transactions.push(tx);
+      saveStore(store);
+      closeModal('modalWasooli');
+      e.target.reset();
+      showToast(`Wasooli Recorded: ₹${amount.toLocaleString('en-IN')}`, 'success');
+
+      syncToGoogleSheet('ADD_COLLECTION', tx);
+      openSlipModal(tx.id);
+    }
+
+    function handleUdhaarSubmit(e) {
+      e.preventDefault();
+      const store = getStore();
+      const biz = businesses[activeBusinessId];
+      const custId = document.getElementById('udhaarCustSelect').value;
+      const amount = Number(document.getElementById('udhaarAmountInput').value);
+      const notes = document.getElementById('udhaarNotesInput').value.trim();
+
+      const cust = store.customers.find(c => c.id === custId);
+      if (!cust) return showToast('Pehle grahak chunein!', 'error');
+
+      const stats = calculateCustomerStats(cust, store.transactions);
+      const prevBal = stats.remainingBalance;
+      const newBal = prevBal + amount;
+
+      const slipNo = `${biz.prefix || 'FS'}-MEMO-${Math.floor(10000 + Math.random() * 90000)}`;
+      const tx = {
+        id: 'tx_' + Date.now(),
+        slipNo: slipNo,
+        date: getTodayString(),
+        time: getTodayTimeString(),
+        businessId: activeBusinessId,
+        customerId: cust.id,
+        customerName: cust.name,
+        shopName: cust.shop || '',
+        customerPhone: cust.phone,
+        type: 'GAVE',
+        amount: amount,
+        mode: 'Maal / Credit',
+        ref: '',
+        notes: notes,
+        totalMaang: stats.totalMaang + amount,
+        prevBalance: prevBal,
+        newBalance: newBal
+      };
+
+      store.transactions.push(tx);
+      saveStore(store);
+      closeModal('modalUdhaar');
+      e.target.reset();
+      showToast(`Udhaar Saved: ₹${amount.toLocaleString('en-IN')}`, 'info');
+
+      syncToGoogleSheet('ADD_UDHAAR', tx);
+      openSlipModal(tx.id);
+    }
+
+    function handleExpenseSubmit(e) {
+      e.preventDefault();
+      const store = getStore();
+      const newExp = {
+        id: 'exp_' + Date.now(),
+        date: getTodayString(),
+        category: document.getElementById('expCategoryInput').value.trim(),
+        amount: Number(document.getElementById('expAmountInput').value),
+        desc: document.getElementById('expDescInput').value.trim(),
+        mode: document.getElementById('expModeSelect').value
+      };
+
+      store.expenses.push(newExp);
+      saveStore(store);
+      closeModal('modalNewExpense');
+      e.target.reset();
+      showToast('Kharcha save ho gaya!', 'success');
+      syncToGoogleSheet('ADD_EXPENSE', newExp);
+    }
+
+    function openSlipModal(txId) {
+      const store = getStore();
+      const tx = store.transactions.find(t => t.id === txId);
+      if (!tx) return;
+
+      currentViewingSlip = tx;
+      const biz = businesses[tx.businessId || activeBusinessId];
+      const isJama = tx.type === 'GOT';
+
+      const slipHTML = `
+        <div style="text-align: center;">
+          <div style="font-family: 'Cinzel', serif; font-size: 15px; font-weight: 800; letter-spacing: 0.5px;">${biz.name.toUpperCase()}</div>
+          <div style="font-size: 9px; color: #475569;">${biz.sub || ''}</div>
+          <div style="font-size: 9px; color: #475569;">${biz.city}</div>
+        </div>
+
+        <div class="double-divider"></div>
+
+        <div style="text-align: center; font-weight: 700; font-size: 11px; text-transform: uppercase;">
+          ${isJama ? '★ DAILY COLLECTION RECEIPT SLIP ★' : '▲ UDHAAR / CREDIT MEMO SLIP ▲'}
+        </div>
+
+        <div class="dashed-divider"></div>
+
+        <table style="width: 100%; font-size: 10px;">
+          <tr>
+            <td><strong>Slip No:</strong> ${tx.slipNo}</td>
+            <td style="text-align: right;"><strong>Date:</strong> ${tx.date}</td>
+          </tr>
+          <tr>
+            <td><strong>Time:</strong> ${tx.time || 'Counter'}</td>
+            <td style="text-align: right;"><strong>Mode:</strong> ${tx.mode}</td>
+          </tr>
+        </table>
+
+        <div class="dashed-divider"></div>
+
+        <div style="font-size: 10px;">
+          <div><strong>GRAHAK:</strong> ${tx.customerName.toUpperCase()}</div>
+          ${tx.shopName ? `<div><strong>DUKAN/FIRM:</strong> ${tx.shopName}</div>` : ''}
+          <div><strong>CONTACT:</strong> +91 ${tx.customerPhone || '-'}</div>
+        </div>
+
+        <div class="dashed-divider"></div>
+
+        <div style="font-size: 10px;">
+          <div><strong>PARTICULARS / ITEM:</strong></div>
+          <div style="padding: 2px 0; color: #1e293b;">${tx.notes || '-'}</div>
+          ${tx.ref ? `<div style="font-size: 9px; color: #64748b;">Ref/UTR: ${tx.ref}</div>` : ''}
+        </div>
+
+        <div class="double-divider"></div>
+
+        <table style="width: 100%; font-size: 10px;">
+          <tr style="color: #64748b;">
+            <td>Pehle Ka Bacha Baaki:</td>
+            <td style="text-align: right;">₹${Number(tx.prevBalance || 0).toLocaleString('en-IN')}</td>
+          </tr>
+          <tr style="font-size: 12px; font-weight: 800; border-top: 1px dashed #cbd5e1; border-bottom: 1px dashed #cbd5e1;">
+            <td style="padding: 3px 0;">${isJama ? 'AAJ WASOOL HUI RAKAM:' : 'AAJ DIYA GAYA UDHAAR:'}</td>
+            <td style="text-align: right; color: ${isJama ? '#047857' : '#e11d48'};">₹${Number(tx.amount).toLocaleString('en-IN')}</td>
+          </tr>
+          <tr style="font-weight: 800; font-size: 11px;">
+            <td style="padding-top: 4px;">ABHI BACHA HUA BAAKI:</td>
+            <td style="text-align: right; color: #0f172a; font-size: 12px;">₹${Number(tx.newBalance || 0).toLocaleString('en-IN')}</td>
+          </tr>
+        </table>
+
+        <div class="double-divider"></div>
+
+        <div style="text-align: center; font-size: 9px; color: #475569;">
+          <div>Certified Quality • Safe Digital Khata</div>
+          <div style="margin-top: 2px;">Shukriya! Visit Again</div>
+          <div style="font-size: 8px; color: #94a3b8; margin-top: 4px;">Software Powered by Faridi Stones Suite</div>
+        </div>
+      `;
+
+      document.getElementById('printableSlipArea').innerHTML = slipHTML;
+      document.getElementById('btnSendWhatsAppSlip').onclick = () => { sendSlipOverWhatsApp(tx); };
+      openModal('modalSlip');
+    }
+
+    function buildSlipWhatsAppText(tx) {
+      const biz = businesses[tx.businessId || activeBusinessId];
+      const isJama = tx.type === 'GOT';
+
+      return (
+        `*${biz.name.toUpperCase()}*\n` +
+        `${biz.sub || ''}\n` +
+        `----------------------------------------\n` +
+        `*${isJama ? '★ DAILY COLLECTION RECEIPT ★' : '▲ UDHAAR / CREDIT MEMO ▲'}*\n` +
+        `----------------------------------------\n` +
+        `*Slip No:* ${tx.slipNo}\n` +
+        `*Tareeq:* ${tx.date} ${tx.time || ''}\n` +
+        `*Grahak:* ${tx.customerName} ${tx.shopName ? `(${tx.shopName})` : ''}\n` +
+        `*Particulars:* ${tx.notes || '-'}\n` +
+        `*Payment Mode:* ${tx.mode} ${tx.ref ? `(Ref: ${tx.ref})` : ''}\n` +
+        `----------------------------------------\n` +
+        `*Pehle Ka Baaki:* ₹${Number(tx.prevBalance || 0).toLocaleString('en-IN')}\n` +
+        `*${isJama ? 'Aaj Wasool Hui Rakam' : 'Aaj Diya Gaya Udhaar'}:* *₹${Number(tx.amount).toLocaleString('en-IN')}*\n` +
+        `*ABHI BACHA HUA BAAKI:* *₹${Number(tx.newBalance || 0).toLocaleString('en-IN')}*\n` +
+        `----------------------------------------\n` +
+        `Kisi bhi jaankaari ke liye sampark karein.\n` +
+        `_Shukriya!_\n*${biz.name}, ${biz.city}*`
+      );
+    }
+
+    function sendSlipOverWhatsApp(tx) {
+      const text = buildSlipWhatsAppText(tx);
+      const url = `https://wa.me/91${tx.customerPhone}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    function shareSlipNative() {
+      if (!currentViewingSlip) return;
+      const text = buildSlipWhatsAppText(currentViewingSlip);
+      if (navigator.share) {
+        navigator.share({
+          title: `Slip ${currentViewingSlip.slipNo} - Faridi Stones`,
+          text: text
+        }).catch(() => {});
+      } else {
+        copySlipToClipboard();
+      }
+    }
+
+    function copySlipToClipboard() {
+      if (!currentViewingSlip) return;
+      const text = buildSlipWhatsAppText(currentViewingSlip);
+      
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Slip text clipboard par copy ho gaya!', 'success');
+      } catch (err) {
+        showToast('Copy failed', 'error');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function openCustomerLedgerModal(custId) {
+      const store = getStore();
+      const cust = store.customers.find(c => c.id === custId);
+      if (!cust) return;
+
+      const biz = businesses[activeBusinessId];
+      const stats = calculateCustomerStats(cust, store.transactions);
+
+      document.getElementById('ledgerModalTitle').innerText = `${cust.name} ${cust.shop ? `(${cust.shop})` : ''}`;
+      document.getElementById('ledgerModalSubtitle').innerText = `Phone: +91 ${cust.phone} | City: ${cust.city || 'Ajmer'}`;
+
+      document.getElementById('ledgerCardTotalMaang').innerText = `₹${stats.totalMaang.toLocaleString('en-IN')}`;
+      document.getElementById('ledgerCardTotalWasool').innerText = `₹${stats.totalWasool.toLocaleString('en-IN')}`;
+      document.getElementById('ledgerCardTotalBaaki').innerText = `₹${stats.remainingBalance.toLocaleString('en-IN')}`;
+
+      const custTx = store.transactions.filter(t => t.customerId === cust.id);
+      const tbody = document.getElementById('ledgerPassbookTbody');
+
+      let running = stats.openingMaang - stats.openingWasool;
+      let initialRow = (stats.openingMaang > 0 || stats.openingWasool > 0) ? `
+        <tr class="bg-amber-50/50">
+          <td class="py-2.5 px-3 font-semibold text-slate-700">Opening</td>
+          <td class="py-2.5 px-2 font-mono text-slate-500 font-bold">START</td>
+          <td class="py-2.5 px-3 text-slate-600">
+            Shuruati Maang: ₹${stats.openingMaang.toLocaleString('en-IN')} 
+            ${stats.openingWasool > 0 ? `| Jama: ₹${stats.openingWasool.toLocaleString('en-IN')}` : ''}
+          </td>
+          <td class="py-2.5 px-2 text-right font-bold text-amber-800">${stats.openingMaang > 0 ? `₹${stats.openingMaang.toLocaleString('en-IN')}` : '-'}</td>
+          <td class="py-2.5 px-2 text-right font-bold text-blue-700">${stats.openingWasool > 0 ? `₹${stats.openingWasool.toLocaleString('en-IN')}` : '-'}</td>
+          <td class="py-2.5 px-3 text-right font-extrabold text-slate-900">₹${running.toLocaleString('en-IN')}</td>
+        </tr>
+      ` : '';
+
+      const txRows = custTx.map(t => {
+        const isJama = t.type === 'GOT';
+        if (isJama) running -= Number(t.amount);
+        else running += Number(t.amount);
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-2.5 px-3 font-semibold text-slate-700">${t.date}</td>
+            <td class="py-2.5 px-2 font-mono font-bold text-slate-900">${t.slipNo.slice(-6)}</td>
+            <td class="py-2.5 px-3 text-slate-600">${t.notes || '-'}</td>
+            <td class="py-2.5 px-2 text-right font-bold text-rose-600">${!isJama ? `₹${Number(t.amount).toLocaleString('en-IN')}` : '-'}</td>
+            <td class="py-2.5 px-2 text-right font-bold text-blue-700">${isJama ? `₹${Number(t.amount).toLocaleString('en-IN')}` : '-'}</td>
+            <td class="py-2.5 px-3 text-right font-bold text-slate-900">₹${running.toLocaleString('en-IN')}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = (initialRow + txRows) || `<tr><td colspan="6" class="text-center py-8 text-slate-400">Koi ledger entry nahi hai.</td></tr>`;
+
+      document.getElementById('btnLedgerWhatsAppReminder').onclick = () => { sendQuickWhatsAppReminder(cust.id); };
+      openModal('modalLedger');
+    }
+
+    function sendQuickWhatsAppReminder(custId) {
+      const store = getStore();
+      const cust = store.customers.find(c => c.id === custId);
+      if (!cust) return;
+
+      const biz = businesses[activeBusinessId];
+      const stats = calculateCustomerStats(cust, store.transactions);
+
+      const msg = 
+        `*HISAAB YAAD-DIHANI | ${biz.name.toUpperCase()}*\n` +
+        `----------------------------------------\n` +
+        `Namaste ${cust.name} ji ${cust.shop ? `(${cust.shop})` : ''},\n\n` +
+        `*${biz.name}* ki taraf se aapka hisaab status:\n` +
+        `• Kul Maang: ₹${stats.totalMaang.toLocaleString('en-IN')}\n` +
+        `• Aaj Tak Jama: ₹${stats.totalWasool.toLocaleString('en-IN')}\n` +
+        `• *NET BACHA HUA BAAKI: ₹${stats.remainingBalance.toLocaleString('en-IN')}*\n\n` +
+        `Kripya aane wali daily collection me bacha hua hisaab clear karwayein.\n\n` +
+        `_Shukriya!_\n*${biz.name}, ${biz.city}*`;
+
+      window.open(`https://wa.me/91${cust.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function saveSheetSettings() {
+      const url = document.getElementById('sheetApiUrlInput').value.trim();
+      localStorage.setItem('fs_sheet_api_url', url);
+      closeModal('modalSettings');
+      checkSyncStatus();
+      showToast('Google Sheet Sync Settings Saved!', 'success');
+    }
+
+    function checkSyncStatus() {
+      const url = localStorage.getItem('fs_sheet_api_url');
+      const dot = document.getElementById('syncDot');
+      const label = document.getElementById('syncLabel');
+
+      if (url && url.startsWith('http')) {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        label.innerText = 'Sheet Connected';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-slate-400';
+        label.innerText = 'Offline Safe Mode';
+      }
+    }
+
+    function syncToGoogleSheet(action, payload) {
+      const url = localStorage.getItem('fs_sheet_api_url');
+      if (!url) return;
+
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: action, ...payload })
+      }).then(() => {
+        showToast('Synced to Google Sheet!', 'success');
+      }).catch(err => {
+        console.debug('Sheet sync error: ', err);
+      });
+    }
+
+    function exportFullJSONBackup() {
+      const backupData = {
+        version: '6.0',
+        exportedAt: new Date().toISOString(),
+        businesses: businesses,
+        stores: {}
+      };
+      Object.keys(businesses).forEach(id => {
+        backupData.stores[id] = JSON.parse(localStorage.getItem(`fs_store_${id}_v6`)) || { customers: [], transactions: [], expenses: [] };
+      });
+
+      const dataBlob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+      const dlUrl = URL.createObjectURL(dataBlob);
+      const a = document.createElement('a');
+      a.href = dlUrl;
+      a.download = `Faridi_Stones_Complete_Khata_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(dlUrl);
+      showToast('Backup File Downloaded!', 'success');
+    }
+
+    function triggerRestoreJSON() {
+      document.getElementById('restoreFileInput').click();
+    }
+
+    function handleRestoreFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed.stores) {
+            if (parsed.businesses) {
+              businesses = parsed.businesses;
+              localStorage.setItem('fs_businesses_v6', JSON.stringify(businesses));
+            }
+            Object.keys(parsed.stores).forEach(id => {
+              localStorage.setItem(`fs_store_${id}_v6`, JSON.stringify(parsed.stores[id]));
+            });
+            renderApp();
+            showToast('Backup Restored Successfully!', 'success');
+            closeModal('modalSettings');
+          } else {
+            showToast('Invalid backup file.', 'error');
+          }
+        } catch (err) {
+          showToast('Failed to read file.', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      const colors = {
+        success: 'bg-emerald-800 text-white border-emerald-600',
+        error: 'bg-rose-800 text-white border-rose-600',
+        info: 'bg-royal-900 text-white border-slate-700'
+      };
+
+      toast.className = `px-4 py-2.5 rounded-xl border shadow-lg text-xs font-semibold flex items-center gap-2 pointer-events-auto transition-all transform translate-y-2 opacity-0 ${colors[type] || colors.info}`;
+      toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${message}`;
+
+      container.appendChild(toast);
+      setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 50);
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    window.onload = function() {
+      const savedSheetUrl = localStorage.getItem('fs_sheet_api_url') || '';
+      document.getElementById('sheetApiUrlInput').value = savedSheetUrl;
+      checkSyncStatus();
+      renderApp();
+    };
+  </script>
+</body>
+</html>
