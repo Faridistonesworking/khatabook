@@ -81,7 +81,7 @@
     .dashed-divider { border-top: 1px dashed #64748b; margin: 8px 0; }
     .double-divider { border-top: 2px dashed #0f172a; margin: 8px 0; }
 
-    /* High Precision Thermal Print */
+    /* Thermal Print Optimization */
     @media print {
       @page {
         size: 80mm auto;
@@ -187,7 +187,7 @@
     </div>
   </aside>
 
-  <!-- Mobile Bottom Navigation Dock -->
+  <!-- Mobile Bottom Dock (Khatabook Style) -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-royal-950/95 backdrop-blur-md border-t border-white/10 z-40 px-2 py-1.5 flex items-center justify-around shadow-2xl">
     <button onclick="navigateTab('dashboard')" id="mob_nav_dashboard" class="mob-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-emerald-400 transition-all">
       <i class="fa-solid fa-chart-pie text-base mb-0.5"></i>
@@ -214,7 +214,7 @@
     </button>
   </nav>
 
-  <!-- Main View Area -->
+  <!-- Main View -->
   <main class="flex-1 flex flex-col min-w-0 bg-slate-50">
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-3 md:px-8 py-2.5 md:py-3 flex items-center justify-between shadow-sm">
       <div class="flex items-center gap-2 md:gap-3">
@@ -502,10 +502,13 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
         <div class="flex items-center gap-2 text-emerald-800">
+          <button type="button" onclick="closeModal('modalNewCust')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:text-slate-900 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <i class="fa-solid fa-user-plus"></i>
-          <h3 class="font-extrabold text-sm">Naya Grahak Entry (Manual Details)</h3>
+          <h3 class="font-extrabold text-sm">Naya Grahak Entry</h3>
         </div>
         <button onclick="closeModal('modalNewCust')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
       </div>
@@ -581,8 +584,11 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-blue-50/70">
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-blue-50/70">
         <div class="flex items-center gap-2 text-blue-700">
+          <button type="button" onclick="closeModal('modalWasooli')" class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <i class="fa-solid fa-hand-holding-dollar"></i>
           <h3 class="font-extrabold text-sm">Daily Wasooli / Jama Entry</h3>
         </div>
@@ -652,10 +658,13 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-rose-50/70">
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-rose-50/70">
         <div class="flex items-center gap-2 text-rose-700">
+          <button type="button" onclick="closeModal('modalUdhaar')" class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 hover:bg-rose-200 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <i class="fa-solid fa-minus"></i>
-          <h3 class="font-extrabold text-sm">Maine Diya (Naya Udhaar / Maal Entry)</h3>
+          <h3 class="font-extrabold text-sm">Maine Diya (Naya Udhaar / Maal)</h3>
         </div>
         <button onclick="closeModal('modalUdhaar')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
       </div>
@@ -702,10 +711,13 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-amber-50/70">
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-amber-50/70">
         <div class="flex items-center gap-2 text-amber-800">
+          <button type="button" onclick="closeModal('modalNewExpense')" class="w-8 h-8 rounded-full bg-amber-100 text-amber-800 hover:bg-amber-200 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <i class="fa-solid fa-wallet"></i>
-          <h3 class="font-extrabold text-sm">Dukan Ka Kharcha (Record Expense)</h3>
+          <h3 class="font-extrabold text-sm">Dukan Ka Kharcha</h3>
         </div>
         <button onclick="closeModal('modalNewExpense')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
       </div>
@@ -749,10 +761,13 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
         <div class="flex items-center gap-2 text-slate-800">
+          <button type="button" onclick="closeModal('modalEditBiz')" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <i class="fa-solid fa-store text-emerald-600"></i>
-          <h3 class="font-extrabold text-sm">Business Settings & Name</h3>
+          <h3 class="font-extrabold text-sm">Business Settings</h3>
         </div>
         <button onclick="closeModal('modalEditBiz')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
       </div>
@@ -788,8 +803,11 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet my-auto">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
         <div class="flex items-center gap-2 text-slate-800">
+          <button type="button" onclick="closeModal('modalSlip')" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <i class="fa-solid fa-receipt text-emerald-600"></i>
           <h3 class="font-extrabold text-xs uppercase tracking-wider">Faridi Digital Receipt Slip</h3>
         </div>
@@ -826,10 +844,15 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden mobile-sheet my-auto max-h-[92vh] flex flex-col">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-        <div>
-          <h3 id="ledgerModalTitle" class="font-extrabold text-sm text-slate-800">Grahak Statement Passbook</h3>
-          <p id="ledgerModalSubtitle" class="text-[11px] text-slate-500">Statement history & running balance</p>
+      <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeModal('modalLedger')" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <div>
+            <h3 id="ledgerModalTitle" class="font-extrabold text-sm text-slate-800">Grahak Statement Passbook</h3>
+            <p id="ledgerModalSubtitle" class="text-[11px] text-slate-500">Statement history & running balance</p>
+          </div>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="window.print()" class="hidden sm:flex px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-100 items-center gap-1">
@@ -886,8 +909,11 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
-      <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+      <div class="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
         <div class="flex items-center gap-2 text-slate-800">
+          <button type="button" onclick="closeModal('modalSettings')" class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center justify-center text-xs mr-1" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
           <i class="fa-solid fa-cloud-arrow-up text-emerald-600"></i>
           <h3 class="font-extrabold text-sm">Google Sheet Cloud Sync</h3>
         </div>
@@ -940,6 +966,7 @@
     let activeBusinessId = localStorage.getItem('fs_active_biz_v6') || 'b_main';
     let currentViewingSlip = null;
     let activeCustomerFilter = 'ALL';
+    let modalHistoryStack = []; // Hardware back button tracking
 
     function getStore() {
       const storageKey = `fs_store_${activeBusinessId}_v6`;
@@ -2020,15 +2047,44 @@
       reader.readAsText(file);
     }
 
+    // Modal Manager with Full History State (Physical & UI Back Button Support)
     function openModal(id) {
       const el = document.getElementById(id);
-      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+        
+        modalHistoryStack.push(id);
+        // Push state so phone's hardware back button detects it
+        window.history.pushState({ modalOpen: id }, '');
+      }
     }
 
-    function closeModal(id) {
+    function closeModal(id, isBackEvent = false) {
       const el = document.getElementById(id);
-      if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+      if (el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
+
+      const index = modalHistoryStack.indexOf(id);
+      if (index > -1) {
+        modalHistoryStack.splice(index, 1);
+      }
+
+      // If closed manually via X or back arrow, step back browser history so it stays in sync
+      if (!isBackEvent && window.history.state && window.history.state.modalOpen === id) {
+        window.history.back();
+      }
     }
+
+    // Listen to Mobile Hardware / Gesture Back Button
+    window.addEventListener('popstate', function(event) {
+      if (modalHistoryStack.length > 0) {
+        const topModalId = modalHistoryStack[modalHistoryStack.length - 1];
+        closeModal(topModalId, true);
+      }
+    });
 
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
