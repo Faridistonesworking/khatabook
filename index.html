@@ -49,8 +49,7 @@
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-    /* Touch Friendly Enhancements */
-    button, a, input, select {
+    button, a, input, select, textarea {
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
@@ -60,7 +59,6 @@
       transition: transform 0.08s ease;
     }
 
-    /* Mobile Sheet Slide-Up */
     @media (max-width: 640px) {
       .mobile-sheet {
         border-bottom-left-radius: 0 !important;
@@ -69,28 +67,12 @@
       }
     }
 
-    @media print {
-      body * { visibility: hidden; }
-      #printableSlipArea, #printableSlipArea * { visibility: visible; }
-      #printableSlipArea {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        margin: 0;
-        padding: 10px;
-        background: white !important;
-        color: black !important;
-      }
-      .no-print { display: none !important; }
-    }
-
     .thermal-receipt {
       font-family: 'JetBrains Mono', monospace;
-      max-width: 320px;
+      max-width: 300px;
       margin: 0 auto;
       background: #ffffff;
-      padding: 16px 14px;
+      padding: 14px 10px;
       border: 1px dashed #94a3b8;
       font-size: 11px;
       line-height: 1.45;
@@ -98,12 +80,44 @@
     }
     .dashed-divider { border-top: 1px dashed #64748b; margin: 8px 0; }
     .double-divider { border-top: 2px dashed #0f172a; margin: 8px 0; }
+
+    /* High Precision Thermal Print */
+    @media print {
+      @page {
+        size: 80mm auto;
+        margin: 0mm;
+      }
+      html, body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+      }
+      body > *:not(#printWindowSlot) {
+        display: none !important;
+      }
+      #printWindowSlot {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+        padding: 4mm !important;
+      }
+      #printWindowSlot .thermal-receipt {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
   </style>
 </head>
 
 <body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col md:flex-row pb-20 md:pb-0">
 
-  <!-- Desktop Sidebar Navigation (Hidden on Mobile) -->
+  <!-- Desktop Sidebar Navigation -->
   <aside class="hidden md:flex md:w-64 bg-royal-950 text-white flex-col flex-shrink-0 md:sticky md:top-0 md:h-screen border-r border-white/10 z-40">
     <div class="p-5 border-b border-white/10">
       <div class="flex items-center gap-3">
@@ -121,12 +135,11 @@
           <label class="text-[9px] uppercase font-bold tracking-wider text-slate-400">
             <i class="fa-solid fa-briefcase text-emerald-400 mr-1"></i> Active Business
           </label>
-          <button onclick="openModal('modalEditBiz')" class="text-[10px] text-emerald-400 hover:text-emerald-300 transition" title="Business Naam Badalna / Naya Business">
+          <button onclick="openModal('modalEditBiz')" class="text-[10px] text-emerald-400 hover:text-emerald-300 transition" title="Business Badalna">
             <i class="fa-solid fa-pen-to-square"></i> Badalna
           </button>
         </div>
         <select id="activeBizSelect" onchange="switchActiveBusiness(this.value)" class="w-full bg-royal-900 text-white text-xs font-semibold rounded p-1.5 border border-white/20 focus:outline-none focus:border-emerald-500">
-          <!-- Populated dynamically via JS -->
         </select>
       </div>
     </div>
@@ -161,10 +174,10 @@
     <div class="p-3 border-t border-white/10 bg-royal-950 text-xs">
       <div class="flex items-center justify-between text-slate-400 mb-2">
         <span class="flex items-center gap-1.5 text-[11px]">
-          <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="syncDot" class="w-2 h-2 rounded-full bg-slate-400"></span>
           <span id="syncLabel">Offline Safe Mode</span>
         </span>
-        <button onclick="openModal('modalSettings')" class="text-slate-400 hover:text-emerald-400 transition" title="Google Sheet Sync Settings">
+        <button onclick="openModal('modalSettings')" class="text-slate-400 hover:text-emerald-400 transition" title="Sync Settings">
           <i class="fa-solid fa-gear"></i>
         </button>
       </div>
@@ -174,7 +187,7 @@
     </div>
   </aside>
 
-  <!-- Mobile Bottom Navigation Dock (Khatabook Style) -->
+  <!-- Mobile Bottom Navigation Dock -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-royal-950/95 backdrop-blur-md border-t border-white/10 z-40 px-2 py-1.5 flex items-center justify-around shadow-2xl">
     <button onclick="navigateTab('dashboard')" id="mob_nav_dashboard" class="mob-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-emerald-400 transition-all">
       <i class="fa-solid fa-chart-pie text-base mb-0.5"></i>
@@ -186,7 +199,6 @@
       <span class="text-[10px] font-semibold">Grahak</span>
     </button>
 
-    <!-- Center Floating Action Button for Quick Wasooli -->
     <button onclick="openWasooliModal()" class="flex flex-col items-center justify-center -mt-5 bg-gradient-to-tr from-blue-700 to-blue-500 text-white w-12 h-12 rounded-full shadow-lg shadow-blue-600/40 border-2 border-royal-950 touch-press">
       <i class="fa-solid fa-hand-holding-dollar text-lg"></i>
     </button>
@@ -202,10 +214,10 @@
     </button>
   </nav>
 
+  <!-- Main View Area -->
   <main class="flex-1 flex flex-col min-w-0 bg-slate-50">
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-3 md:px-8 py-2.5 md:py-3 flex items-center justify-between shadow-sm">
       <div class="flex items-center gap-2 md:gap-3">
-        <!-- Mobile Logo Icon -->
         <div class="md:hidden w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center shadow-sm">
           <i class="fa-solid fa-gem text-xs"></i>
         </div>
@@ -220,7 +232,6 @@
         </div>
       </div>
 
-      <!-- Quick Action Buttons (Optimized for Mobile & Desktop) -->
       <div class="flex items-center gap-1.5 md:gap-2">
         <button onclick="openWasooliModal()" class="touch-press px-2.5 md:px-3.5 py-1.5 md:py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition">
           <i class="fa-solid fa-hand-holding-dollar text-xs"></i>
@@ -237,7 +248,6 @@
           <span class="hidden md:inline">Grahak</span>
         </button>
 
-        <!-- Mobile Settings Icon -->
         <button onclick="openModal('modalSettings')" class="md:hidden w-8 h-8 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center text-xs">
           <i class="fa-solid fa-gear"></i>
         </button>
@@ -246,11 +256,9 @@
 
     <div class="p-3 md:p-8 flex-1 overflow-y-auto">
 
+      <!-- DASHBOARD TAB -->
       <section id="view_dashboard" class="page-view block space-y-4 md:space-y-6">
-        
-        <!-- Live Financial Metric Cards: 2x2 on Mobile, 4-Col on Desktop -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
-          <!-- Total Market Maang / Total Given -->
           <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-1 bg-amber-500"></div>
             <div class="flex items-center justify-between text-slate-500 mb-1">
@@ -261,7 +269,6 @@
             <p class="text-[10px] text-slate-500 mt-0.5 truncate hidden sm:block">Kul hisaab credit</p>
           </div>
 
-          <!-- Total Lifetime Wasool (Collected) -->
           <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-1 bg-blue-600"></div>
             <div class="flex items-center justify-between text-slate-500 mb-1">
@@ -272,7 +279,6 @@
             <p class="text-[10px] text-slate-500 mt-0.5 truncate">Aaj: <span id="dashTodayColPart" class="font-bold text-blue-700">₹0</span></p>
           </div>
 
-          <!-- Total Bacha Hua Baaki (Pending / Lena Hai) -->
           <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-1 bg-rose-600"></div>
             <div class="flex items-center justify-between text-slate-500 mb-1">
@@ -283,7 +289,6 @@
             <p class="text-[10px] text-slate-500 mt-0.5 truncate"><span id="dashPendingCustCount">0</span> grahak pending</p>
           </div>
 
-          <!-- Aaj Ke Kharche -->
           <div class="bg-white border border-slate-200 rounded-xl p-3 md:p-4 shadow-sm relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-1 bg-slate-700"></div>
             <div class="flex items-center justify-between text-slate-500 mb-1">
@@ -305,32 +310,25 @@
               <button onclick="navigateTab('transactions')" class="text-xs font-semibold text-emerald-700 hover:underline">Sabhi Dekhein</button>
             </div>
 
-            <!-- Mobile Recent List (Card Styled) -->
-            <div id="dashRecentMobileList" class="md:hidden divide-y divide-slate-100 p-2">
-              <!-- Rendered via JS -->
-            </div>
+            <div id="dashRecentMobileList" class="md:hidden divide-y divide-slate-100 p-2"></div>
 
-            <!-- Desktop Table -->
             <div class="hidden md:block overflow-x-auto">
               <table class="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] tracking-wider">
                     <th class="py-3 px-4">Slip / Date</th>
                     <th class="py-3 px-4">Grahak / Dukan</th>
-                    <th class="py-3 px-4">Particulars</th>
+                    <th class="py-3 px-4">Product & Quantity</th>
                     <th class="py-3 px-4 text-right">Rakam</th>
                     <th class="py-3 px-4 text-right">Bacha Hua Baaki</th>
                     <th class="py-3 px-4 text-center">Slip Action</th>
                   </tr>
                 </thead>
-                <tbody id="dashRecentTbody" class="divide-y divide-slate-100">
-                  <!-- Populated via JS -->
-                </tbody>
+                <tbody id="dashRecentTbody" class="divide-y divide-slate-100"></tbody>
               </table>
             </div>
           </div>
 
-          <!-- Watchlist Column -->
           <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
             <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
               <div class="flex items-center gap-2">
@@ -340,13 +338,12 @@
               <button onclick="navigateTab('customers')" class="text-xs font-semibold text-emerald-700 hover:underline">Sabhi</button>
             </div>
 
-            <div class="p-3 divide-y divide-slate-100 overflow-y-auto max-h-[360px]" id="dashWatchlistContainer">
-              <!-- Populated via JS -->
-            </div>
+            <div class="p-3 divide-y divide-slate-100 overflow-y-auto max-h-[360px]" id="dashWatchlistContainer"></div>
           </div>
         </div>
       </section>
 
+      <!-- CUSTOMERS TAB -->
       <section id="view_customers" class="page-view hidden space-y-3 md:space-y-4">
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
           <div class="relative flex-1">
@@ -358,7 +355,6 @@
           </button>
         </div>
 
-        <!-- Filter Chips for Easy Mobile Tapping -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
           <button onclick="setCustFilter('ALL')" id="filterChip_ALL" class="cust-filter-chip px-3 py-1 rounded-full font-bold bg-slate-900 text-white shadow-sm whitespace-nowrap">
             Sabhi Grahak
@@ -374,12 +370,8 @@
           </button>
         </div>
 
-        <!-- Mobile Customer Cards Container -->
-        <div id="customersCardList" class="md:hidden space-y-2.5">
-          <!-- Rendered via JS -->
-        </div>
+        <div id="customersCardList" class="md:hidden space-y-2.5"></div>
 
-        <!-- Desktop Customer Table Container -->
         <div class="hidden md:block bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs border-collapse">
@@ -393,14 +385,13 @@
                   <th class="py-3 px-4 text-center">Fast Actions</th>
                 </tr>
               </thead>
-              <tbody id="customersTableBody" class="divide-y divide-slate-100">
-                <!-- Populated via JS -->
-              </tbody>
+              <tbody id="customersTableBody" class="divide-y divide-slate-100"></tbody>
             </table>
           </div>
         </div>
       </section>
 
+      <!-- COLLECTIONS TAB -->
       <section id="view_collections" class="page-view hidden space-y-3 md:space-y-4">
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
           <div>
@@ -412,12 +403,8 @@
           </button>
         </div>
 
-        <!-- Mobile Collections List -->
-        <div id="collectionsMobileList" class="md:hidden space-y-2.5">
-          <!-- Rendered via JS -->
-        </div>
+        <div id="collectionsMobileList" class="md:hidden space-y-2.5"></div>
 
-        <!-- Desktop Table -->
         <div class="hidden md:block bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs border-collapse">
@@ -433,14 +420,13 @@
                   <th class="py-3 px-4 text-center">Digital Slip</th>
                 </tr>
               </thead>
-              <tbody id="collectionTableBody" class="divide-y divide-slate-100">
-                <!-- Populated via JS -->
-              </tbody>
+              <tbody id="collectionTableBody" class="divide-y divide-slate-100"></tbody>
             </table>
           </div>
         </div>
       </section>
 
+      <!-- ALL TRANSACTIONS TAB -->
       <section id="view_transactions" class="page-view hidden space-y-3 md:space-y-4">
         <div class="flex items-center justify-between bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
           <div>
@@ -465,21 +451,20 @@
                   <th class="py-3 px-4">Slip / Date</th>
                   <th class="py-3 px-4">Grahak & Dukan</th>
                   <th class="py-3 px-4">Type</th>
-                  <th class="py-3 px-4">Particulars / Details</th>
+                  <th class="py-3 px-4">Product & Quantity</th>
                   <th class="py-3 px-4">Mode</th>
                   <th class="py-3 px-4 text-right">Amount (₹)</th>
                   <th class="py-3 px-4 text-right">New Baaki</th>
                   <th class="py-3 px-4 text-center">Slip</th>
                 </tr>
               </thead>
-              <tbody id="allTxTableBody" class="divide-y divide-slate-100">
-                <!-- Populated via JS -->
-              </tbody>
+              <tbody id="allTxTableBody" class="divide-y divide-slate-100"></tbody>
             </table>
           </div>
         </div>
       </section>
 
+      <!-- EXPENSES TAB -->
       <section id="view_expenses" class="page-view hidden space-y-3 md:space-y-4">
         <div class="flex items-center justify-between bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm">
           <div>
@@ -503,9 +488,7 @@
                   <th class="py-3 px-4 text-right">Amount (₹)</th>
                 </tr>
               </thead>
-              <tbody id="expensesTableBody" class="divide-y divide-slate-100">
-                <!-- Populated via JS -->
-              </tbody>
+              <tbody id="expensesTableBody" class="divide-y divide-slate-100"></tbody>
             </table>
           </div>
         </div>
@@ -514,9 +497,9 @@
     </div>
   </main>
 
+  <!-- MODAL: ADD MANUAL CUSTOMER -->
   <div id="modalNewCust" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
-    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet animate-slide-up">
-      <!-- Mobile Pull Bar Indicator -->
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
 
       <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
@@ -549,7 +532,6 @@
           </div>
         </div>
 
-        <!-- 3-Tier Interactive Initial Dues & Collection Box -->
         <div class="bg-gradient-to-br from-amber-50/80 via-slate-50 to-blue-50/60 p-3.5 rounded-xl border border-amber-200/80 space-y-3 shadow-inner">
           <div class="flex items-center justify-between pb-1 border-b border-slate-200/80">
             <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
@@ -564,7 +546,6 @@
                 1. Kul Maang (Total Amount ₹) *
               </label>
               <input type="number" id="custTotalMaangInput" inputmode="numeric" oninput="calcCustModalBaaki()" value="0" min="0" placeholder="Jaise: 10000" class="w-full px-3 py-2 border border-amber-300 rounded-lg text-sm font-extrabold text-amber-950 focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white shadow-sm">
-              <p class="text-[9.5px] text-amber-700 mt-0.5 leading-tight">Kul kitna hisaab banta hai</p>
             </div>
 
             <div>
@@ -572,11 +553,9 @@
                 2. Jama / Collect Hua (₹)
               </label>
               <input type="number" id="custTotalWasoolInput" inputmode="numeric" oninput="calcCustModalBaaki()" value="0" min="0" placeholder="Jaise: 2000" class="w-full px-3 py-2 border border-blue-300 rounded-lg text-sm font-extrabold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white shadow-sm">
-              <p class="text-[9.5px] text-blue-700 mt-0.5 leading-tight">Pehle se kitna collect hua</p>
             </div>
           </div>
 
-          <!-- Dynamic Auto-Calculated Remaining Due Card -->
           <div class="bg-white p-2.5 rounded-lg border border-slate-200/90 flex items-center justify-between shadow-sm">
             <div>
               <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">3. Bacha Hua Baaki (Lena Hai)</div>
@@ -597,6 +576,7 @@
     </div>
   </div>
 
+  <!-- MODAL: DAILY WASOOLI -->
   <div id="modalWasooli" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
@@ -613,11 +593,9 @@
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Grahak Chunein (Kisse wasooli mili?) *</label>
           <select id="wasooliCustSelect" onchange="updateWasooliLivePreview()" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <!-- Populated via JS -->
           </select>
         </div>
 
-        <!-- Live Hisaab Breakdown Box -->
         <div id="wasooliLiveBox" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-1">
           <div class="flex justify-between text-slate-600">
             <span>Kul Maang (Total Udhaar):</span>
@@ -669,6 +647,7 @@
     </div>
   </div>
 
+  <!-- MODAL: UDHAAR / MAAL ENTRY -->
   <div id="modalUdhaar" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
@@ -685,18 +664,28 @@
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Grahak Chunein (Kisko maal diya?) *</label>
           <select id="udhaarCustSelect" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
-            <!-- Populated via JS -->
           </select>
         </div>
 
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Product / Item Ka Naam *</label>
+            <input type="text" id="udhaarItemInput" required placeholder="Jaise: Oudh Ittar / Panna" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Quantity / Nang (Packets) *</label>
+            <input type="text" id="udhaarQtyInput" required placeholder="2 bade packet, 2 chote" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+          </div>
+        </div>
+
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Naye Maal / Udhaar Ki Rakam (₹) *</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Kul Keemat / Amount (₹) *</label>
           <input type="number" id="udhaarAmountInput" inputmode="numeric" required placeholder="Jaise: 5000" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-base font-bold text-rose-700 focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Maal / Item Particulars (Manual Detail) *</label>
-          <textarea id="udhaarNotesInput" rows="2" required placeholder="Jaise: 6.25 Ratti Zambian Panna, ring polishing, etc." class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Extra Details / Note</label>
+          <input type="text" id="udhaarNotesInput" placeholder="Jaise: Batch 1, bill ref" class="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
 
         <div class="pt-1">
@@ -708,6 +697,7 @@
     </div>
   </div>
 
+  <!-- MODAL: EXPENSE -->
   <div id="modalNewExpense" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
@@ -722,7 +712,7 @@
 
       <form onsubmit="handleExpenseSubmit(event)" class="p-5 space-y-3.5 max-h-[80vh] overflow-y-auto">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Kharcha Category (Apne hisaab se likhein) *</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Kharcha Category (Manually Likhein) *</label>
           <input type="text" id="expCategoryInput" required placeholder="Jaise: Rent, Chai, Karigar Mazdoori, Courier" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
         </div>
 
@@ -754,6 +744,7 @@
     </div>
   </div>
 
+  <!-- MODAL: EDIT BUSINESS -->
   <div id="modalEditBiz" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
@@ -792,6 +783,7 @@
     </div>
   </div>
 
+  <!-- MODAL: DIGITAL SLIP PREVIEW -->
   <div id="modalSlip" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4 overflow-y-auto">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet my-auto">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
@@ -799,18 +791,15 @@
       <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
         <div class="flex items-center gap-2 text-slate-800">
           <i class="fa-solid fa-receipt text-emerald-600"></i>
-          <h3 class="font-extrabold text-xs uppercase tracking-wider">Faridi Stones Digital Receipt Slip</h3>
+          <h3 class="font-extrabold text-xs uppercase tracking-wider">Faridi Digital Receipt Slip</h3>
         </div>
         <button onclick="closeModal('modalSlip')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 text-sm flex items-center justify-center">&times;</button>
       </div>
 
       <div class="p-3 md:p-4 bg-slate-100 flex justify-center max-h-[55vh] overflow-y-auto">
-        <div id="printableSlipArea" class="thermal-receipt shadow-md rounded-lg">
-          <!-- Populated via renderSlipHTML() -->
-        </div>
+        <div id="printableSlipArea" class="thermal-receipt shadow-md rounded-lg"></div>
       </div>
 
-      <!-- Action Buttons for WhatsApp, Native Share & Print -->
       <div class="p-3.5 bg-white border-t border-slate-100 space-y-2">
         <div class="grid grid-cols-2 gap-2">
           <button id="btnSendWhatsAppSlip" class="touch-press w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
@@ -821,7 +810,7 @@
           </button>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <button onclick="window.print()" class="touch-press w-full py-2 px-3 rounded-lg border border-slate-300 hover:bg-slate-50 font-bold text-xs text-slate-700 flex items-center justify-center gap-2 transition">
+          <button onclick="printSlipThermal()" class="touch-press w-full py-2 px-3 rounded-lg border border-slate-300 hover:bg-slate-50 font-bold text-xs text-slate-700 flex items-center justify-center gap-2 transition">
             <i class="fa-solid fa-print text-xs"></i> Print Thermal
           </button>
           <button onclick="copySlipToClipboard()" class="touch-press w-full py-2 px-3 rounded-lg border border-slate-300 hover:bg-slate-50 font-semibold text-xs text-slate-700 flex items-center justify-center gap-1.5 transition">
@@ -832,6 +821,7 @@
     </div>
   </div>
 
+  <!-- MODAL: CUSTOMER PASSBOOK -->
   <div id="modalLedger" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4 overflow-y-auto">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden mobile-sheet my-auto max-h-[92vh] flex flex-col">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
@@ -850,7 +840,6 @@
       </div>
 
       <div class="p-3.5 md:p-4 overflow-y-auto flex-1 space-y-3.5">
-        <!-- 3-Tier Summary Card in Passbook -->
         <div class="grid grid-cols-3 gap-2">
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-center">
             <div class="text-[9px] uppercase font-bold text-amber-800">Kul Maang</div>
@@ -879,21 +868,20 @@
               <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[9px] md:text-[10px] tracking-wider">
                 <th class="py-2.5 px-3">Date</th>
                 <th class="py-2.5 px-2">Slip</th>
-                <th class="py-2.5 px-3">Particulars</th>
+                <th class="py-2.5 px-3">Particulars & Qty</th>
                 <th class="py-2.5 px-2 text-right">Diya</th>
                 <th class="py-2.5 px-2 text-right">Wasool</th>
                 <th class="py-2.5 px-3 text-right">Baaki</th>
               </tr>
             </thead>
-            <tbody id="ledgerPassbookTbody" class="divide-y divide-slate-100">
-              <!-- Rendered via JS -->
-            </tbody>
+            <tbody id="ledgerPassbookTbody" class="divide-y divide-slate-100"></tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- MODAL: SETTINGS -->
   <div id="modalSettings" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden sm:items-center items-end justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full shadow-2xl overflow-hidden mobile-sheet">
       <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden"></div>
@@ -910,7 +898,7 @@
         <div>
           <label class="block font-bold text-slate-700 mb-1">Google Apps Script Web App URL</label>
           <input type="url" id="sheetApiUrlInput" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-          <p class="text-[10px] text-slate-500 mt-1">Deploy Apps Script in your Google Sheet and paste URL here to auto-stream every entry.</p>
+          <p class="text-[10px] text-slate-500 mt-1">Deploy Apps Script in your Google Sheet and paste URL here to auto-stream entries.</p>
         </div>
 
         <div class="flex gap-2 pt-2">
@@ -928,8 +916,10 @@
 
   <div id="toastContainer" class="fixed bottom-16 md:bottom-5 right-4 left-4 md:left-auto md:right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
+  <!-- Dedicated Print Slot for 100% Clean Thermal Output -->
+  <div id="printWindowSlot" style="display: none;"></div>
+
   <script>
-    // Business Registry with manual customization
     let businesses = JSON.parse(localStorage.getItem('fs_businesses_v6')) || {
       'b_main': {
         name: 'Faridi Stones',
@@ -937,6 +927,13 @@
         city: 'Ajmer Sharif (Rajasthan)',
         phone: '98290XXXXX',
         prefix: 'FS'
+      },
+      'b_ittar': {
+        name: 'Faridi Ittar & Perfumers',
+        sub: 'Pure Attar, Oudh & Fragrances',
+        city: 'Ajmer Sharif (Rajasthan)',
+        phone: '98290XXXXX',
+        prefix: 'FI'
       }
     };
 
@@ -1019,7 +1016,6 @@
     }
 
     function navigateTab(tabId) {
-      // Desktop Nav update
       document.querySelectorAll('.nav-tab-btn').forEach(b => {
         b.classList.remove('bg-emerald-700/20', 'text-emerald-300', 'border-l-4', 'border-emerald-500');
         b.classList.add('text-slate-400');
@@ -1030,7 +1026,6 @@
         activeBtn.classList.remove('text-slate-400');
       }
 
-      // Mobile Bottom Nav update
       document.querySelectorAll('.mob-nav-btn').forEach(b => {
         b.classList.remove('text-emerald-400', 'font-bold');
         b.classList.add('text-slate-400');
@@ -1202,9 +1197,9 @@
 
       const recentItems = transactions.slice(-6).reverse();
 
-      // Mobile Card Renderer
       mobileList.innerHTML = recentItems.map(tx => {
         const isJama = tx.type === 'GOT';
+        const itemInfo = tx.item ? `${tx.item} (${tx.quantity || '1 nang'})` : (tx.notes || '-');
         return `
           <div class="py-2.5 flex items-center justify-between">
             <div class="flex items-center gap-2.5 min-w-0">
@@ -1213,7 +1208,7 @@
               </div>
               <div class="min-w-0 truncate">
                 <div class="font-bold text-xs text-slate-800 truncate">${tx.customerName}</div>
-                <div class="text-[10px] text-slate-400 font-medium">${tx.date} • ${tx.notes || '-'}</div>
+                <div class="text-[10px] text-slate-500 truncate">${tx.date} • <strong class="text-slate-700">${itemInfo}</strong></div>
               </div>
             </div>
             <div class="text-right flex items-center gap-2">
@@ -1231,7 +1226,6 @@
         `;
       }).join('');
 
-      // Desktop Table
       tbody.innerHTML = recentItems.map(tx => {
         const isJama = tx.type === 'GOT';
         return `
@@ -1244,7 +1238,9 @@
               <span class="font-bold text-slate-800">${tx.customerName}</span><br>
               <span class="text-[10px] text-slate-400">${tx.shopName || '-'}</span>
             </td>
-            <td class="py-2.5 px-4 text-slate-600 truncate max-w-[140px]">${tx.notes || '-'}</td>
+            <td class="py-2.5 px-4">
+              ${tx.item ? `<strong>${tx.item}</strong><br><span class="text-[10px] text-blue-600 font-semibold">${tx.quantity || ''}</span>` : `<span class="text-slate-600">${tx.notes || '-'}</span>`}
+            </td>
             <td class="py-2.5 px-4 text-right font-bold text-sm ${isJama ? 'text-blue-700' : 'text-rose-600'}">
               ${isJama ? '+' : '-'}₹${Number(tx.amount).toLocaleString('en-IN')}
             </td>
@@ -1298,7 +1294,6 @@
         stats: calculateCustomerStats(c, store.transactions)
       }));
 
-      // Search Filter
       if (query) {
         list = list.filter(c => 
           c.name.toLowerCase().includes(query) ||
@@ -1308,7 +1303,6 @@
         );
       }
 
-      // Quick Chips Filter
       if (activeCustomerFilter === 'PENDING') {
         list = list.filter(c => c.stats.remainingBalance > 0);
       } else if (activeCustomerFilter === 'SETTLED') {
@@ -1324,7 +1318,6 @@
         return;
       }
 
-      // Mobile Card List (Khatabook App Style)
       cardList.innerHTML = list.map(c => {
         const stats = c.stats;
         const isPending = stats.remainingBalance > 0;
@@ -1343,7 +1336,6 @@
                 </div>
               </div>
 
-              <!-- Balance Badge -->
               <div class="text-right flex-shrink-0">
                 <div class="font-extrabold text-sm ${isPending ? 'text-rose-600' : (isAdvance ? 'text-emerald-700' : 'text-slate-500')}">
                   ₹${Math.abs(stats.remainingBalance).toLocaleString('en-IN')}
@@ -1354,7 +1346,6 @@
               </div>
             </div>
 
-            <!-- 3-Tier Mini Pill Breakdown -->
             <div class="grid grid-cols-3 gap-1.5 bg-slate-50 p-2 rounded-lg text-center text-[10px]">
               <div>
                 <span class="text-slate-500 block">Maang</span>
@@ -1370,7 +1361,6 @@
               </div>
             </div>
 
-            <!-- Fast Mobile Action Buttons -->
             <div class="flex items-center gap-1.5 pt-0.5">
               <button onclick="openWasooliModal('${c.id}')" class="touch-press flex-1 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm">
                 <i class="fa-solid fa-hand-holding-dollar text-xs"></i> + Wasooli
@@ -1389,7 +1379,6 @@
         `;
       }).join('');
 
-      // Desktop Table
       tbody.innerHTML = list.map(c => {
         const stats = c.stats;
         return `
@@ -1418,13 +1407,13 @@
             </td>
             <td class="py-3 px-4 text-center">
               <div class="inline-flex items-center gap-1.5">
-                <button onclick="openWasooliModal('${c.id}')" class="px-2.5 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold text-xs" title="Daily Wasooli">
+                <button onclick="openWasooliModal('${c.id}')" class="px-2.5 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold text-xs">
                   <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Wasooli
                 </button>
-                <button onclick="openCustomerLedgerModal('${c.id}')" class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold text-xs" title="View Statement">
+                <button onclick="openCustomerLedgerModal('${c.id}')" class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold text-xs">
                   <i class="fa-solid fa-book-open mr-1 text-emerald-700"></i> Passbook
                 </button>
-                <button onclick="sendQuickWhatsAppReminder('${c.id}')" class="px-2 py-1 rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-semibold text-xs" title="WhatsApp Reminder">
+                <button onclick="sendQuickWhatsAppReminder('${c.id}')" class="px-2 py-1 rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-semibold text-xs">
                   <i class="fa-brands fa-whatsapp text-sm"></i>
                 </button>
               </div>
@@ -1448,7 +1437,6 @@
 
       const revCollections = collections.slice().reverse();
 
-      // Mobile Card List
       mobileList.innerHTML = revCollections.map(c => `
         <div class="bg-white rounded-xl border border-slate-200 p-3 shadow-sm flex items-center justify-between">
           <div class="min-w-0 pr-2">
@@ -1468,7 +1456,6 @@
         </div>
       `).join('');
 
-      // Desktop Table
       tbody.innerHTML = revCollections.map(c => `
         <tr class="hover:bg-slate-50/70 transition">
           <td class="py-3 px-4 font-mono font-bold text-slate-800">${c.slipNo}</td>
@@ -1501,7 +1488,9 @@
             <td class="py-3 px-4 font-mono font-bold text-slate-800">${tx.slipNo}<br><span class="text-[10px] font-sans font-normal text-slate-400">${tx.date}</span></td>
             <td class="py-3 px-4 font-bold text-slate-900">${tx.customerName}<br><span class="text-[10px] font-normal text-slate-400">${tx.shopName || ''}</span></td>
             <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${isJama ? 'bg-blue-50 text-blue-700' : 'bg-rose-50 text-rose-700'}">${isJama ? 'Wasooli' : 'Udhaar Diya'}</span></td>
-            <td class="py-3 px-4 text-slate-600">${tx.notes || '-'}</td>
+            <td class="py-3 px-4">
+              ${tx.item ? `<strong>${tx.item}</strong><br><span class="text-[10px] text-blue-600 font-bold">${tx.quantity || ''}</span>` : `<span class="text-slate-600">${tx.notes || '-'}</span>`}
+            </td>
             <td class="py-3 px-4 text-slate-600">${tx.mode}</td>
             <td class="py-3 px-4 text-right font-extrabold text-sm ${isJama ? 'text-emerald-700' : 'text-rose-600'}">
               ${isJama ? '+' : '-'}₹${Number(tx.amount).toLocaleString('en-IN')}
@@ -1637,8 +1626,10 @@
       const store = getStore();
       const biz = businesses[activeBusinessId];
       const custId = document.getElementById('udhaarCustSelect').value;
+      const item = document.getElementById('udhaarItemInput').value.trim();
+      const qty = document.getElementById('udhaarQtyInput').value.trim();
       const amount = Number(document.getElementById('udhaarAmountInput').value);
-      const notes = document.getElementById('udhaarNotesInput').value.trim();
+      const extraNotes = document.getElementById('udhaarNotesInput').value.trim();
 
       const cust = store.customers.find(c => c.id === custId);
       if (!cust) return showToast('Pehle grahak chunein!', 'error');
@@ -1659,10 +1650,12 @@
         shopName: cust.shop || '',
         customerPhone: cust.phone,
         type: 'GAVE',
+        item: item,
+        quantity: qty,
         amount: amount,
         mode: 'Maal / Credit',
         ref: '',
-        notes: notes,
+        notes: extraNotes,
         totalMaang: stats.totalMaang + amount,
         prevBalance: prevBal,
         newBalance: newBal
@@ -1744,8 +1737,9 @@
         <div class="dashed-divider"></div>
 
         <div style="font-size: 10px;">
-          <div><strong>PARTICULARS / ITEM:</strong></div>
-          <div style="padding: 2px 0; color: #1e293b;">${tx.notes || '-'}</div>
+          ${tx.item ? `<div><strong>PRODUCT / MAAL:</strong> ${tx.item}</div>` : ''}
+          ${tx.quantity ? `<div><strong>QUANTITY / NANG:</strong> <span style="font-weight: bold; color: #047857;">${tx.quantity}</span></div>` : ''}
+          ${tx.notes ? `<div><strong>DETAILS:</strong> ${tx.notes}</div>` : ''}
           ${tx.ref ? `<div style="font-size: 9px; color: #64748b;">Ref/UTR: ${tx.ref}</div>` : ''}
         </div>
 
@@ -1784,6 +1778,11 @@
       const biz = businesses[tx.businessId || activeBusinessId];
       const isJama = tx.type === 'GOT';
 
+      let detailsBlock = '';
+      if (tx.item) detailsBlock += `*Product / Maal:* ${tx.item}\n`;
+      if (tx.quantity) detailsBlock += `*Quantity / Nang:* *${tx.quantity}*\n`;
+      if (tx.notes && tx.notes !== 'Daily Wasooli / Jama') detailsBlock += `*Notes:* ${tx.notes}\n`;
+
       return (
         `*${biz.name.toUpperCase()}*\n` +
         `${biz.sub || ''}\n` +
@@ -1793,7 +1792,7 @@
         `*Slip No:* ${tx.slipNo}\n` +
         `*Tareeq:* ${tx.date} ${tx.time || ''}\n` +
         `*Grahak:* ${tx.customerName} ${tx.shopName ? `(${tx.shopName})` : ''}\n` +
-        `*Particulars:* ${tx.notes || '-'}\n` +
+        detailsBlock +
         `*Payment Mode:* ${tx.mode} ${tx.ref ? `(Ref: ${tx.ref})` : ''}\n` +
         `----------------------------------------\n` +
         `*Pehle Ka Baaki:* ₹${Number(tx.prevBalance || 0).toLocaleString('en-IN')}\n` +
@@ -1841,6 +1840,15 @@
       document.body.removeChild(textArea);
     }
 
+    function printSlipThermal() {
+      const slipSource = document.getElementById('printableSlipArea');
+      const printSlot = document.getElementById('printWindowSlot');
+      if (!slipSource || !printSlot) return;
+
+      printSlot.innerHTML = slipSource.innerHTML;
+      window.print();
+    }
+
     function openCustomerLedgerModal(custId) {
       const store = getStore();
       const cust = store.customers.find(c => c.id === custId);
@@ -1879,11 +1887,13 @@
         if (isJama) running -= Number(t.amount);
         else running += Number(t.amount);
 
+        const particularText = t.item ? `${t.item} (${t.quantity || ''})` : (t.notes || '-');
+
         return `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-2.5 px-3 font-semibold text-slate-700">${t.date}</td>
             <td class="py-2.5 px-2 font-mono font-bold text-slate-900">${t.slipNo.slice(-6)}</td>
-            <td class="py-2.5 px-3 text-slate-600">${t.notes || '-'}</td>
+            <td class="py-2.5 px-3 text-slate-600">${particularText}</td>
             <td class="py-2.5 px-2 text-right font-bold text-rose-600">${!isJama ? `₹${Number(t.amount).toLocaleString('en-IN')}` : '-'}</td>
             <td class="py-2.5 px-2 text-right font-bold text-blue-700">${isJama ? `₹${Number(t.amount).toLocaleString('en-IN')}` : '-'}</td>
             <td class="py-2.5 px-3 text-right font-bold text-slate-900">₹${running.toLocaleString('en-IN')}</td>
@@ -1950,7 +1960,7 @@
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action: action, ...payload })
       }).then(() => {
-        showToast('Synced to Google Sheet!', 'success');
+        showToast('Synced to Cloud Sheet!', 'success');
       }).catch(err => {
         console.debug('Sheet sync error: ', err);
       });
